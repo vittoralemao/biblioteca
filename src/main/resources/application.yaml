@@ -3,9 +3,9 @@ spring:
     name: biblioteca
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:biblioteca}
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:biblioteca_db}
+    username: ${POSTGRES_USER:biblioteca}
+    password: ${POSTGRES_PASSWORD:biblioteca}
     driver-class-name: org.postgresql.Driver
 
     hikari:
