@@ -22,7 +22,7 @@ public class Livro {
     @Column(name = "titulo", nullable = false, length = 150)
     private String titulo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "autor_id", nullable = false)
     private Autor autor;
 

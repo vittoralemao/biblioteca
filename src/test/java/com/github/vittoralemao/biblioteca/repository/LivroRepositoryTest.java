@@ -46,4 +46,21 @@ class LivroRepositoryTest {
         assertThat(livroRetornado).isPresent().get().hasFieldOrPropertyWithValue("titulo", TITULO_TESTE);
     }
 
+    @Test
+    void deveSalvarEValidarLivroEAutorEmCascata(){
+        Livro livro = new Livro();
+        livro.setTitulo(TITULO_TESTE);
+        livro.setIsbn(ISBN_TESTE);
+        livro.setCategoria(Categoria.TECNOLOGIA);
+        livro.setAnoPublicacao(2008);
+
+        Autor autor = new Autor();
+        autor.setNome(AUTOR_TESTE);
+        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        livro.setAutor(autor);
+        livroRepository.save(livro);
+
+        assertThat(autor.getId()).isNotNull();
+        assertThat(livro.getId()).isNotNull();
+    }
 }
