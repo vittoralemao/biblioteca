@@ -1,4 +1,5 @@
 package com.github.vittoralemao.biblioteca.repository;
+import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.entity.Livro;
 import com.github.vittoralemao.biblioteca.enums.Categoria;
 import org.junit.jupiter.api.Test;
@@ -16,16 +17,25 @@ class LivroRepositoryTest {
 
     private static final String TITULO_TESTE = "Clean Code";
     private static final String AUTOR_TESTE = "Robert C. Martin";
+    private static final String NACIONALIDADE_TESTE = "Americano";
     private static final String ISBN_TESTE = "978-85-508-0200-0";
 
     @Autowired
     private LivroRepository livroRepository;
 
+    @Autowired
+    private AutorRepository autorRepository;
+
     @Test
     void deveSalvarEValidarDadosDoLivro(){
+        Autor autor = new Autor();
+        autor.setNome(AUTOR_TESTE);
+        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        Autor autorSalvo = autorRepository.save(autor);
+
         Livro livro = new Livro();
         livro.setTitulo(TITULO_TESTE);
-        livro.setAutor(AUTOR_TESTE);
+        livro.setAutor(autorSalvo);
         livro.setIsbn(ISBN_TESTE);
         livro.setCategoria(Categoria.TECNOLOGIA);
         livro.setAnoPublicacao(2008);

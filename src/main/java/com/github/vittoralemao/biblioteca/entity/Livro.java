@@ -22,8 +22,9 @@ public class Livro {
     @Column(name = "titulo", nullable = false, length = 150)
     private String titulo;
 
-    @Column(name = "autor", nullable = false, length = 100)
-    private String autor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "autor_id", nullable = false)
+    private Autor autor;
 
     @Column(name = "categoria", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
