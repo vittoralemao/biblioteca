@@ -29,6 +29,28 @@ class AutorRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
+    void deveBuscarAutorComLivrosUsandoEntityGraph(){
+        Autor autor = new Autor();
+        autor.setNome(NOME_TESTE);
+        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        entityManager.persistAndFlush(autor);
+
+        Livro livro = new Livro();
+        livro.setTitulo(TITULO_TESTE);
+        livro.setAutor(autor);
+        livro.setCategoria(Categoria.HISTORIA);
+        livro.setIsbn("978-85-508-0200-0");
+        entityManager.persistAndFlush(livro);
+
+        entityManager.clear();
+
+        Optional<Autor> autorComLivro = autorRepository.findById(autor.getId());
+
+        assertThat(autorComLivro).isPresent();
+        assertThatCode(() -> autorComLivro.get().getLivros().size()).doesNotThrowAnyException();
+    }
+
+    @Test
     void deveSalvarEValidarDadosDoAutor() {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
