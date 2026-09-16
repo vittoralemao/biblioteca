@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface AutorRepository extends JpaRepository<Autor, Long> {
+public interface AutorRepository extends JpaRepository<Autor, UUID> {
 
     @EntityGraph(attributePaths = "livros")
-    Optional<Autor> findById(Long id);
+    Optional<Autor> findById(UUID id);
 
     @Query("SELECT autor FROM Autor autor JOIN FETCH autor.livros WHERE autor.id = :id")
-    Optional<Autor> buscarAutorComLivrosPorId(@Param("id") Long id);
+    Optional<Autor> buscarAutorComLivrosPorId(@Param("id") UUID id);
 
 }

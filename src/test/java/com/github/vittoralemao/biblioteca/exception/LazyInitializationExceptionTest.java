@@ -10,6 +10,7 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,7 +31,7 @@ class LazyInitializationExceptionTest {
         autor.setNome(NOME_TESTE);
         autor.setNacionalidade(NACIONALIDADE_TESTE);
         Autor autorPersistido = entityManager.persistAndFlush(autor);
-        Long autorId = autorPersistido.getId();
+        UUID autorId = autorPersistido.getId();
 
         entityManager.clear();
 

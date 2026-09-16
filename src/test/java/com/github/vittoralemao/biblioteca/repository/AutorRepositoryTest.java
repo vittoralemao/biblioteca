@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -75,7 +76,7 @@ class AutorRepositoryTest {
         livro.setAutor(autorPersistido);
         entityManager.persistAndFlush(livro);
 
-        Long autorId = autorPersistido.getId();
+        UUID autorId = autorPersistido.getId();
         entityManager.clear();
 
         Optional<Autor> resultado = autorRepository.buscarAutorComLivrosPorId(autorId);
