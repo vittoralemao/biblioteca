@@ -2,6 +2,7 @@ package com.github.vittoralemao.biblioteca.exception;
 
 import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.entity.Livro;
+import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class LazyInitializationExceptionTest {
 
     private static final String NOME_TESTE = "George Orwell";
-    private static final String NACIONALIDADE_TESTE = "Britânico";
 
     @Autowired
     private TestEntityManager entityManager;
@@ -29,7 +29,7 @@ class LazyInitializationExceptionTest {
     void deveLancarExcecaoAoAcessarListaLazyForaDaSessao() {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
-        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        autor.setNacionalidade(Nacionalidade.BRITANICO);
         Autor autorPersistido = entityManager.persistAndFlush(autor);
         UUID autorId = autorPersistido.getId();
 

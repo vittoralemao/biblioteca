@@ -2,6 +2,7 @@ package com.github.vittoralemao.biblioteca.repository;
 import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.entity.Livro;
 import com.github.vittoralemao.biblioteca.enums.Categoria;
+import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -17,7 +18,6 @@ class LivroRepositoryTest {
 
     private static final String TITULO_TESTE = "Clean Code";
     private static final String AUTOR_TESTE = "Robert C. Martin";
-    private static final String NACIONALIDADE_TESTE = "Americano";
     private static final String ISBN_TESTE = "978-85-508-0200-0";
 
     @Autowired
@@ -30,7 +30,7 @@ class LivroRepositoryTest {
     void deveSalvarEValidarDadosDoLivro(){
         Autor autor = new Autor();
         autor.setNome(AUTOR_TESTE);
-        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        autor.setNacionalidade(Nacionalidade.BRITANICO);
         Autor autorSalvo = autorRepository.save(autor);
 
         Livro livro = new Livro();
@@ -56,7 +56,7 @@ class LivroRepositoryTest {
 
         Autor autor = new Autor();
         autor.setNome(AUTOR_TESTE);
-        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        autor.setNacionalidade(Nacionalidade.BRITANICO);
         livro.setAutor(autor);
         livroRepository.save(livro);
 

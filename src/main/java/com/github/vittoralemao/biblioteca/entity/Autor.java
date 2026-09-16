@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.entity;
 
+import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +28,9 @@ public class Autor {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "nacionalidade", nullable = false, length = 100)
-    private String nacionalidade;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "nacionalidade", nullable = false, length = 30)
+    private Nacionalidade nacionalidade;
 
     @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY)
     private List<Livro> livros = new ArrayList<>();

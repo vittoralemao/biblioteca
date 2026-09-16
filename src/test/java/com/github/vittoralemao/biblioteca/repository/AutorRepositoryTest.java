@@ -3,6 +3,7 @@ package com.github.vittoralemao.biblioteca.repository;
 import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.entity.Livro;
 import com.github.vittoralemao.biblioteca.enums.Categoria;
+import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -20,7 +21,6 @@ import java.util.UUID;
 class AutorRepositoryTest {
 
     private static final String NOME_TESTE = "George Orwell";
-    private static final String NACIONALIDADE_TESTE = "Britânico";
     private static final String TITULO_TESTE = "1984";
 
     @Autowired
@@ -33,7 +33,7 @@ class AutorRepositoryTest {
     void deveBuscarAutorComLivrosUsandoEntityGraph(){
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
-        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        autor.setNacionalidade(Nacionalidade.BRITANICO);
         entityManager.persistAndFlush(autor);
 
         Livro livro = new Livro();
@@ -55,7 +55,7 @@ class AutorRepositoryTest {
     void deveSalvarEValidarDadosDoAutor() {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
-        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        autor.setNacionalidade(Nacionalidade.BRITANICO);
 
         Autor autorSalvo = autorRepository.save(autor);
         Optional<Autor> autorEncontrado = autorRepository.findById(autorSalvo.getId());
@@ -67,7 +67,7 @@ class AutorRepositoryTest {
     void deveBuscarAutorComLivrosSemLancarExcecaoLazy(){
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
-        autor.setNacionalidade(NACIONALIDADE_TESTE);
+        autor.setNacionalidade(Nacionalidade.BRITANICO);
         Autor autorPersistido = entityManager.persistAndFlush(autor);
 
         Livro livro = new Livro();
