@@ -10,6 +10,7 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @DataJpaTest
@@ -18,6 +19,7 @@ class LivroRepositoryTest {
 
     private static final String TITULO_TESTE = "Clean Code";
     private static final String AUTOR_TESTE = "Robert C. Martin";
+    private static final LocalDate DATA_NASCIMENTO_TESTE = LocalDate.of(1903, 6, 25);
     private static final String ISBN_TESTE = "978-85-508-0200-0";
 
     @Autowired
@@ -31,6 +33,7 @@ class LivroRepositoryTest {
         Autor autor = new Autor();
         autor.setNome(AUTOR_TESTE);
         autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         Autor autorSalvo = autorRepository.save(autor);
 
         Livro livro = new Livro();
@@ -57,6 +60,7 @@ class LivroRepositoryTest {
         Autor autor = new Autor();
         autor.setNome(AUTOR_TESTE);
         autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         livro.setAutor(autor);
         livroRepository.save(livro);
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,9 @@ public class Autor {
     @Enumerated(EnumType.STRING)
     @Column(name = "nacionalidade", nullable = false, length = 30)
     private Nacionalidade nacionalidade;
+
+    @Column(name = "data_nascimento", nullable = false)
+    private LocalDate dataNascimento;
 
     @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY)
     private List<Livro> livros = new ArrayList<>();

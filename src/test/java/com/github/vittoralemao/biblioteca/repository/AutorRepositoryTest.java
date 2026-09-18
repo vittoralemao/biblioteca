@@ -13,6 +13,7 @@ import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ import java.util.UUID;
 class AutorRepositoryTest {
 
     private static final String NOME_TESTE = "George Orwell";
+    private static final LocalDate DATA_NASCIMENTO_TESTE = LocalDate.of(1903, 6, 25);
     private static final String TITULO_TESTE = "1984";
 
     @Autowired
@@ -34,6 +36,7 @@ class AutorRepositoryTest {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
         autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         entityManager.persistAndFlush(autor);
 
         Livro livro = new Livro();
@@ -56,6 +59,7 @@ class AutorRepositoryTest {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
         autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
 
         Autor autorSalvo = autorRepository.save(autor);
         Optional<Autor> autorEncontrado = autorRepository.findById(autorSalvo.getId());
@@ -68,6 +72,7 @@ class AutorRepositoryTest {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
         autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         Autor autorPersistido = entityManager.persistAndFlush(autor);
 
         Livro livro = new Livro();
