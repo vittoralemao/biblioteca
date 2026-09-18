@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Livro {
+public class Livro extends EntidadeAuditavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
