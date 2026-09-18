@@ -9,18 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
+import org.springframework.context.annotation.Import;
+import com.github.vittoralemao.biblioteca.config.JpaAuditingConfig;
 
 import java.util.List;
 import java.util.UUID;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
+@Import(JpaAuditingConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class LazyInitializationExceptionTest {
 
     private static final String NOME_TESTE = "George Orwell";
+    private static final LocalDate DATA_NASCIMENTO_TESTE = LocalDate.of(1903, 6, 25);
 
     @Autowired
     private TestEntityManager entityManager;
@@ -30,6 +35,7 @@ class LazyInitializationExceptionTest {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
         autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         Autor autorPersistido = entityManager.persistAndFlush(autor);
         UUID autorId = autorPersistido.getId();
 
