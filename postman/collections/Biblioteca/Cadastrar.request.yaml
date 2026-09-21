@@ -1,0 +1,15 @@
+$kind: http-request
+url: http://localhost:8080/autores
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"nome\":\"George Orwell\",\r
+
+    \    \"dataNascimento\":\"1903-06-25\",\r
+
+    \    \"nacionalidade\":\"BRITANICO\"\r
+
+    }"
+order: 1790016881387
