@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:8080/autores?nacionalidade&nome
+method: GET
+queryParams:
+  nome:
+  nacionalidade:
+order: 4441932878280386

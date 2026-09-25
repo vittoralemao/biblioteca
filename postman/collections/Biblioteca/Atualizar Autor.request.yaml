@@ -1,0 +1,16 @@
+$kind: http-request
+description: ""
+url: http://localhost:8080/autores/{id}
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \    \"nome\":\"NOVO_NOME\",\r
+
+    \    \"dataNascimento\":\"NOVA_DATA\",\r
+
+    \    \"nacionalidade\":\"OUTRA_NACIONALIDADE\"\r
+
+    }"
+order: 4443236656552782

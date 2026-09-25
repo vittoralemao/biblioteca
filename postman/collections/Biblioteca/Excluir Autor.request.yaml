@@ -1,0 +1,5 @@
+$kind: http-request
+description: ""
+url: http://localhost:8080/autores/{id}
+method: DELETE
+order: 4448206915416905
