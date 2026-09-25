@@ -6,13 +6,12 @@ import com.github.vittoralemao.biblioteca.service.AutorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/autores")
@@ -34,6 +33,40 @@ public class AutorController {
 
         return ResponseEntity.created(location).body(autorCriado);
 
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AutorResponseDTO> buscarPorId(@PathVariable UUID id) {
+
+        AutorResponseDTO autor = autorService.buscarPorId(id);
+        return ResponseEntity.ok(autor);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AutorResponseDTO>> listar(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String nacionalidade
+            ) {
+
+        List<AutorResponseDTO> autores = autorService.listar(nome, nacionalidade);
+
+        return ResponseEntity.ok(autores);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AutorResponseDTO> atualizar(
+            @PathVariable UUID id,
+            @RequestBody @Valid
+            AutorRequestDTO dto) {
+
+        AutorResponseDTO autor = autorService.atualizar(id, dto);
+        return ResponseEntity.ok(autor);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable UUID id) {
+        autorService.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
