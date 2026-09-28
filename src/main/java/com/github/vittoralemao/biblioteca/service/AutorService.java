@@ -4,6 +4,7 @@ import com.github.vittoralemao.biblioteca.dto.AutorRequestDTO;
 import com.github.vittoralemao.biblioteca.dto.AutorResponseDTO;
 import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
+import com.github.vittoralemao.biblioteca.exception.AutorDuplicadoException;
 import com.github.vittoralemao.biblioteca.exception.AutorNaoEncontradoException;
 import com.github.vittoralemao.biblioteca.repository.AutorRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +22,14 @@ public class AutorService {
 
     public AutorResponseDTO cadastrar(AutorRequestDTO dto) {
         Autor autor = toEntity(dto);
+
+        if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidade(autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade())) {
+            throw new AutorDuplicadoException("Autor já existente!");
+        }
+
         Autor autorSalvo = autorRepository.save(autor);
         return AutorResponseDTO.fromEntity(autorSalvo);
     }
-
-
 
     public AutorResponseDTO buscarPorId(UUID id) {
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + id));
@@ -39,6 +43,10 @@ public class AutorService {
         autor.setNome(dto.nome());
         autor.setDataNascimento(dto.dataNascimento());
         autor.setNacionalidade(dto.nacionalidade());
+
+        if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidadeAndIdNot(autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade(), autor.getId())) {
+            throw new AutorDuplicadoException("Autor com informações iguais encontrado! ");
+        }
 
         Autor autorSalvo = autorRepository.save(autor);
         return AutorResponseDTO.fromEntity(autorSalvo);

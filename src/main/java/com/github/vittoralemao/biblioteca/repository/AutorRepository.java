@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,5 +23,8 @@ public interface AutorRepository extends JpaRepository<Autor, UUID> {
     List<Autor> findByNomeContainingIgnoreCase(String nome);
     List<Autor> findByNacionalidade(Nacionalidade nacionalidade);
     List<Autor> findByNomeContainingIgnoreCaseAndNacionalidade(String nome, Nacionalidade nacionalidade);
+
+    boolean existsByNomeAndDataNascimentoAndNacionalidade(String nome, LocalDate dataNascimento, Nacionalidade nacionalidade);
+    boolean existsByNomeAndDataNascimentoAndNacionalidadeAndIdNot(String nome, LocalDate dataNascimento, Nacionalidade nacionalidade, UUID id);
 
 }

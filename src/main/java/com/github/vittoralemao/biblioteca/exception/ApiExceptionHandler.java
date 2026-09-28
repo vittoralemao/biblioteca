@@ -22,4 +22,16 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
+
+    @ExceptionHandler(AutorDuplicadoException.class)
+    public ResponseEntity<ErroResponseDTO> trataAutorDuplicado(AutorDuplicadoException ex){
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                List.of()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
 }
