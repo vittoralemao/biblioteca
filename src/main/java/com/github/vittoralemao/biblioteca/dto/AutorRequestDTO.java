@@ -1,11 +1,11 @@
 package com.github.vittoralemao.biblioteca.dto;
 
-import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record AutorRequestDTO(
 
@@ -17,5 +17,5 @@ public record AutorRequestDTO(
         LocalDate dataNascimento,
 
         @NotNull(message = "Nacionalidade é obrigatório")
-        Nacionalidade nacionalidade
+        UUID nacionalidadeId
 ) {}

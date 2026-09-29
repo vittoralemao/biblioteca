@@ -2,12 +2,13 @@ package com.github.vittoralemao.biblioteca.repository;
 import com.github.vittoralemao.biblioteca.config.JpaAuditingConfig;
 import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.entity.Livro;
+import com.github.vittoralemao.biblioteca.entity.Nacionalidade;
 import com.github.vittoralemao.biblioteca.enums.Categoria;
-import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
+import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,11 +33,14 @@ class LivroRepositoryTest {
     @Autowired
     private AutorRepository autorRepository;
 
+    @Autowired
+    private TestEntityManager entityManager;
+
     @Test
     void deveSalvarEValidarDadosDoLivro(){
         Autor autor = new Autor();
         autor.setNome(AUTOR_TESTE);
-        autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setNacionalidade(criaNacionalidadeTest());
         autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         Autor autorSalvo = autorRepository.save(autor);
 
@@ -63,7 +67,7 @@ class LivroRepositoryTest {
 
         Autor autor = new Autor();
         autor.setNome(AUTOR_TESTE);
-        autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setNacionalidade(criaNacionalidadeTest());
         autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         livro.setAutor(autor);
         livroRepository.save(livro);
@@ -71,4 +75,12 @@ class LivroRepositoryTest {
         assertThat(autor.getId()).isNotNull();
         assertThat(livro.getId()).isNotNull();
     }
+
+    private Nacionalidade criaNacionalidadeTest(){
+        Nacionalidade nacionalidade = new Nacionalidade();
+        nacionalidade.setNome("BRITANICO");
+        nacionalidade.setIso("GBR");
+        return entityManager.persistAndFlush(nacionalidade);
+    }
+
 }

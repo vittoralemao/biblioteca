@@ -2,7 +2,7 @@ package com.github.vittoralemao.biblioteca.exception;
 
 import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.entity.Livro;
-import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
+import com.github.vittoralemao.biblioteca.entity.Nacionalidade;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ class LazyInitializationExceptionTest {
     void deveLancarExcecaoAoAcessarListaLazyForaDaSessao() {
         Autor autor = new Autor();
         autor.setNome(NOME_TESTE);
-        autor.setNacionalidade(Nacionalidade.BRITANICO);
+        autor.setNacionalidade(criaNacionalidadeTest());
         autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
         Autor autorPersistido = entityManager.persistAndFlush(autor);
         UUID autorId = autorPersistido.getId();
@@ -51,4 +51,10 @@ class LazyInitializationExceptionTest {
         assertThatThrownBy(livros::size).isInstanceOf(LazyInitializationException.class);
     }
 
+    private Nacionalidade criaNacionalidadeTest(){
+        Nacionalidade nacionalidade = new Nacionalidade();
+        nacionalidade.setNome("BRITANICO");
+        nacionalidade.setIso("GBR");
+        return entityManager.persistAndFlush(nacionalidade);
+    }
 }

@@ -1,6 +1,5 @@
 package com.github.vittoralemao.biblioteca.entity;
 
-import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +26,8 @@ public class Autor extends EntidadeAuditavel {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "nacionalidade", nullable = false, length = 30)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nacionalidade_id", nullable = false)
     private Nacionalidade nacionalidade;
 
     @Column(name = "data_nascimento", nullable = false)
