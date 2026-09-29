@@ -1,0 +1,14 @@
+$kind: http-request
+description: ""
+url: http://localhost:8080/nacionalidades/{id}
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \    \"nome\":\"BRASILEIRA\",\r
+
+    \    \"iso\":\"BR\"\r
+    
+    }"
+order: 1123799888593

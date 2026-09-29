@@ -1,0 +1,5 @@
+$kind: http-request
+description: ""
+url: http://localhost:8080/nacionalidades/{id}
+method: DELETE
+order: 3548566905234768

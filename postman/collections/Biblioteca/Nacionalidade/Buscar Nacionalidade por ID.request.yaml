@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:8080/nacionalidades/{id}
+method: GET
+body:
+  type: json
+  content: ""
+order: 762741653344
