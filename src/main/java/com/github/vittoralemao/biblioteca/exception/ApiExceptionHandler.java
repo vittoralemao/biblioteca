@@ -11,8 +11,8 @@ import java.util.List;
 public class ApiExceptionHandler {
 
 
-    @ExceptionHandler(AutorNaoEncontradoException.class)
-    public ResponseEntity<ErroResponseDTO> trataAutorNaoEncontrado(AutorNaoEncontradoException ex){
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<ErroResponseDTO> trataEntidadeNaoEncontrado(EntidadeNaoEncontradaException ex){
 
         ErroResponseDTO erro = new ErroResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
@@ -23,8 +23,8 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
-    @ExceptionHandler(AutorDuplicadoException.class)
-    public ResponseEntity<ErroResponseDTO> trataAutorDuplicado(AutorDuplicadoException ex){
+    @ExceptionHandler(EntidadeDuplicadaException.class)
+    public ResponseEntity<ErroResponseDTO> trataEntidadeDuplicada(EntidadeDuplicadaException ex){
 
         ErroResponseDTO erro = new ErroResponseDTO(
                 HttpStatus.CONFLICT.value(),
@@ -34,4 +34,5 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
+
 }
