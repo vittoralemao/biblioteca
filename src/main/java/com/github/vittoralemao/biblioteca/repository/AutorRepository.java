@@ -1,7 +1,7 @@
 package com.github.vittoralemao.biblioteca.repository;
 
 import com.github.vittoralemao.biblioteca.entity.Autor;
-import com.github.vittoralemao.biblioteca.enums.Nacionalidade;
+import com.github.vittoralemao.biblioteca.entity.Nacionalidade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -21,8 +21,8 @@ public interface AutorRepository extends JpaRepository<Autor, UUID> {
     Optional<Autor> buscarAutorComLivrosPorId(@Param("id") UUID id);
 
     List<Autor> findByNomeContainingIgnoreCase(String nome);
-    List<Autor> findByNacionalidade(Nacionalidade nacionalidade);
-    List<Autor> findByNomeContainingIgnoreCaseAndNacionalidade(String nome, Nacionalidade nacionalidade);
+    List<Autor> findByNacionalidade_NomeContainingIgnoreCase(String nomeNacionalidade);
+    List<Autor> findByNomeContainingIgnoreCaseAndNacionalidade_NomeContainingIgnoreCase(String nome, String nomeNacionalidade);
 
     boolean existsByNomeAndDataNascimentoAndNacionalidade(String nome, LocalDate dataNascimento, Nacionalidade nacionalidade);
     boolean existsByNomeAndDataNascimentoAndNacionalidadeAndIdNot(String nome, LocalDate dataNascimento, Nacionalidade nacionalidade, UUID id);
