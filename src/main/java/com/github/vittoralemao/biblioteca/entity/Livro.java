@@ -1,6 +1,5 @@
 package com.github.vittoralemao.biblioteca.entity;
 
-import com.github.vittoralemao.biblioteca.enums.Categoria;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +27,8 @@ public class Livro extends EntidadeAuditavel {
     @JoinColumn(name = "autor_id", nullable = false)
     private Autor autor;
 
-    @Column(name = "categoria", nullable = false, length = 20)
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
     @Column(name = "isbn", unique = true, length = 20)

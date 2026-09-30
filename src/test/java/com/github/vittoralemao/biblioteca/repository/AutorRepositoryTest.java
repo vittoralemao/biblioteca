@@ -4,7 +4,7 @@ import com.github.vittoralemao.biblioteca.config.JpaAuditingConfig;
 import com.github.vittoralemao.biblioteca.entity.Autor;
 import com.github.vittoralemao.biblioteca.entity.Livro;
 import com.github.vittoralemao.biblioteca.entity.Nacionalidade;
-import com.github.vittoralemao.biblioteca.enums.Categoria;
+import com.github.vittoralemao.biblioteca.entity.Categoria;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -45,7 +45,7 @@ class AutorRepositoryTest {
         Livro livro = new Livro();
         livro.setTitulo(TITULO_TESTE);
         livro.setAutor(autor);
-        livro.setCategoria(Categoria.HISTORIA);
+        livro.setCategoria(criaCategoriaTest());
         livro.setIsbn("978-85-508-0200-0");
         entityManager.persistAndFlush(livro);
 
@@ -80,7 +80,7 @@ class AutorRepositoryTest {
 
         Livro livro = new Livro();
         livro.setTitulo(TITULO_TESTE);
-        livro.setCategoria(Categoria.FICCAO);
+        livro.setCategoria(criaCategoriaTest());
         livro.setAutor(autorPersistido);
         entityManager.persistAndFlush(livro);
 
@@ -102,6 +102,12 @@ class AutorRepositoryTest {
         nacionalidade.setNome("BRITANICO");
         nacionalidade.setIso("GBR");
         return entityManager.persistAndFlush(nacionalidade);
+    }
+
+    private Categoria criaCategoriaTest(){
+        Categoria categoria = new Categoria();
+        categoria.setNome("FICCAO");
+        return entityManager.persistAndFlush(categoria);
     }
 
 }
