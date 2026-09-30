@@ -50,7 +50,7 @@ public class NacionalidadeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir (@PathVariable UUID id){
+    public ResponseEntity<Void> excluir(@PathVariable UUID id){
         nacionalidadeService.excluir(id);
         return ResponseEntity.noContent().build();
     }
