@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ public class Livro extends EntidadeAuditavel {
     private Categoria categoria;
 
     @Column(name = "isbn", unique = true, length = 20)
+    @Nullable
     private String isbn;
 
     @Column(name = "ano_publicacao")
