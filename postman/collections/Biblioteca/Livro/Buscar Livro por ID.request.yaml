@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:8080/livros/{id}
+method: GET
+body:
+  type: json
+  content: ""
+order: 746443482842

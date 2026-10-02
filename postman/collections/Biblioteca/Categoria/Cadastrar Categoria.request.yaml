@@ -1,0 +1,11 @@
+$kind: http-request
+url: http://localhost:8080/categorias
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"nome\": \"TECNOLOGIA\"\r
+
+    }"
+order: 705570453464
