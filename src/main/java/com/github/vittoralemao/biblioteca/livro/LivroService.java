@@ -47,7 +47,7 @@ public class LivroService {
     @Transactional(readOnly = true)
     public LivroResponseDTO buscarPorId(UUID id){
         Livro livro = livroRepository.
-                findById(id).
+                buscarLivroComAutorECategoria(id).
                 orElseThrow(() -> new LivroNaoEncontradoException(LIVRO_NAO_ENCONTRADO + id));
         return LivroResponseDTO.fromEntity(livro);
     }

@@ -5,7 +5,8 @@ body:
   type: json
   content: "{\r
 
-    \    \"titulo\": \"Clean Code: A Handbook of Agile Software Craftsmanship\",\r
+    \    \"titulo\": \"Clean Code: A Handbook of Agile Software
+    Craftsmanship\",\r
 
     \    \"autorId\": \"c01d0f50-027a-4f8c-9e01-778755fa0c38\",\r
 
@@ -16,4 +17,4 @@ body:
     \    \"anoPublicacao\": 2008\r
 
     }"
-order: 705570453464
+order: 1000
