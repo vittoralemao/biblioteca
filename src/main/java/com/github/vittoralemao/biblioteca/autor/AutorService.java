@@ -3,6 +3,7 @@ package com.github.vittoralemao.biblioteca.autor;
 import com.github.vittoralemao.biblioteca.nacionalidade.Nacionalidade;
 import com.github.vittoralemao.biblioteca.nacionalidade.NacionalidadeNaoEncontradaException;
 import com.github.vittoralemao.biblioteca.nacionalidade.NacionalidadeRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class AutorService {
     private static final String AUTOR_NAO_ENCONTRADO = "Autor não encontrado: ";
     private static final String NACIONALIDADE_NAO_ENCONTRADA = "Nacionalidade não encontrada: ";
 
+    @Transactional
     public AutorResponseDTO cadastrar(AutorRequestDTO dto) {
         Autor autor = toEntity(dto);
 
@@ -31,11 +33,13 @@ public class AutorService {
         return AutorResponseDTO.fromEntity(autorSalvo);
     }
 
+    @Transactional(readOnly = true)
     public AutorResponseDTO buscarPorId(UUID id) {
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + id));
         return AutorResponseDTO.fromEntity(autor);
     }
 
+    @Transactional
     public AutorResponseDTO atualizar(UUID id, AutorRequestDTO dto) {
 
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + id));
@@ -54,13 +58,14 @@ public class AutorService {
         Autor autorSalvo = autorRepository.save(autor);
         return AutorResponseDTO.fromEntity(autorSalvo);
     }
-
+    @Transactional
     public void excluir(UUID id) {
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + id));
 
         autorRepository.delete(autor);
     }
 
+    @Transactional(readOnly = true)
     public List<AutorResponseDTO> listar(@Nullable String nome, @Nullable String nacionalidade) {
 
         List<Autor> autores;

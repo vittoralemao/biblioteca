@@ -3,6 +3,7 @@ package com.github.vittoralemao.biblioteca.nacionalidade;
 import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public class NacionalidadeService {
 
     private static final String NACIONALIDADE_NAO_ENCONTRADA = "Nacionalidade não encontrada: ";
 
+    @Transactional
     public NacionalidadeResponseDTO cadastrar (NacionalidadeRequestDTO dto){
         Nacionalidade nacionalidade = toEntity(dto);
 
@@ -26,6 +28,7 @@ public class NacionalidadeService {
         return NacionalidadeResponseDTO.fromEntity(nacionalidadeSalva);
     }
 
+    @Transactional
     public NacionalidadeResponseDTO atualizar(UUID id, NacionalidadeRequestDTO dto){
         Nacionalidade nacionalidade = nacionalidadeRepository.
                 findById(id)
@@ -42,6 +45,7 @@ public class NacionalidadeService {
         return NacionalidadeResponseDTO.fromEntity(nacionalidadeSalva);
     }
 
+    @Transactional(readOnly = true)
     public NacionalidadeResponseDTO buscarPorId(UUID id){
         Nacionalidade nacionalidade = nacionalidadeRepository.
                 findById(id)
@@ -49,6 +53,7 @@ public class NacionalidadeService {
         return NacionalidadeResponseDTO.fromEntity(nacionalidade);
     }
 
+    @Transactional(readOnly = true)
     public List<NacionalidadeResponseDTO> listar(@Nullable String nome, @Nullable String iso) {
 
         List<Nacionalidade> nacionalidades;
@@ -66,6 +71,7 @@ public class NacionalidadeService {
                 .toList();
     }
 
+    @Transactional
     public void excluir(UUID id){
         Nacionalidade nacionalidade = nacionalidadeRepository.
                 findById(id)

@@ -6,6 +6,7 @@ import com.github.vittoralemao.biblioteca.autor.AutorRepository;
 import com.github.vittoralemao.biblioteca.categoria.Categoria;
 import com.github.vittoralemao.biblioteca.categoria.CategoriaNaoEncontradaException;
 import com.github.vittoralemao.biblioteca.categoria.CategoriaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class LivroService {
     private static final String AUTOR_NAO_ENCONTRADO = "Autor não encontrado: ";
     private static final String CATEGORIA_NAO_ENCONTRADA = "Categoria não encontrada: ";
 
-
+    @Transactional
     public LivroResponseDTO cadastrar(LivroRequestDTO dto){
         Livro livro = toEntity(dto);
 
@@ -43,6 +44,7 @@ public class LivroService {
         return LivroResponseDTO.fromEntity(livroSalvo);
     }
 
+    @Transactional(readOnly = true)
     public LivroResponseDTO buscarPorId(UUID id){
         Livro livro = livroRepository.
                 findById(id).
@@ -50,6 +52,7 @@ public class LivroService {
         return LivroResponseDTO.fromEntity(livro);
     }
 
+    @Transactional
     public LivroResponseDTO atualizar(UUID id, LivroRequestDTO dto){
         Livro livro = livroRepository.
                 findById(id).
@@ -81,6 +84,7 @@ public class LivroService {
         return LivroResponseDTO.fromEntity(livroSalvo);
     }
 
+    @Transactional
     public void excluir(UUID id){
         Livro livro = livroRepository.
                 findById(id).
@@ -88,6 +92,7 @@ public class LivroService {
         livroRepository.delete(livro);
     }
 
+    @Transactional(readOnly = true)
     public List<LivroResponseDTO> listar(@Nullable String titulo, @Nullable String autor, @Nullable String categoria){
         List<Livro> livros;
 

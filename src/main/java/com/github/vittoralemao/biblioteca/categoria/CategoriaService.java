@@ -3,6 +3,7 @@ package com.github.vittoralemao.biblioteca.categoria;
 import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +16,7 @@ public class CategoriaService {
 
     private static final String CATEGORIA_NAO_ENCONTRADA = "Categoria não encontrada: ";
 
+    @Transactional
     public CategoriaResponseDTO cadastrar(CategoriaRequestDTO dto){
         Categoria categoria = toEntity(dto);
 
@@ -26,6 +28,7 @@ public class CategoriaService {
         return CategoriaResponseDTO.fromEntity(categoriaSalva);
     }
 
+    @Transactional
     public CategoriaResponseDTO atualizar(UUID id, CategoriaRequestDTO dto){
         Categoria categoria = categoriaRepository.
                 findById(id).
@@ -40,6 +43,7 @@ public class CategoriaService {
         return CategoriaResponseDTO.fromEntity(categoriaSalva);
     }
 
+    @Transactional(readOnly = true)
     public CategoriaResponseDTO buscarPorId(UUID id){
         Categoria categoria = categoriaRepository.
                 findById(id).
@@ -47,6 +51,7 @@ public class CategoriaService {
         return CategoriaResponseDTO.fromEntity(categoria);
     }
 
+    @Transactional(readOnly = true)
     public List<CategoriaResponseDTO> listar(@Nullable String nome){
         List<Categoria> categorias;
 
@@ -61,6 +66,7 @@ public class CategoriaService {
                 .toList();
     }
 
+    @Transactional
     public void excluir(UUID id){
         Categoria categoria = categoriaRepository.
                 findById(id).
