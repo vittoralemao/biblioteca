@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.nacionalidade;
 
+import com.github.vittoralemao.biblioteca.autor.AutorRepository;
 import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,10 @@ import java.util.UUID;
 public class NacionalidadeService {
 
     private final NacionalidadeRepository nacionalidadeRepository;
+    private final AutorRepository autorRepository;
 
     private static final String NACIONALIDADE_NAO_ENCONTRADA = "Nacionalidade não encontrada: ";
+    private static final String NACIONALIDADE_POSSUI_AUTOR_VINCULADO = "Nacionalidade possui autor(s) vinculado(s) e não pode ser excluída: ";
 
     @Transactional
     public NacionalidadeResponseDTO cadastrar (NacionalidadeRequestDTO dto){
@@ -76,6 +79,10 @@ public class NacionalidadeService {
         Nacionalidade nacionalidade = nacionalidadeRepository.
                 findById(id)
                 .orElseThrow(() -> new NacionalidadeNaoEncontradaException(NACIONALIDADE_NAO_ENCONTRADA + id));
+
+        if(autorRepository.existsByNacionalidade(nacionalidade)) {
+            throw new NacionalidadeComAutorVinculadoException(NACIONALIDADE_POSSUI_AUTOR_VINCULADO + id);
+        }
 
         nacionalidadeRepository.delete(nacionalidade);
     }

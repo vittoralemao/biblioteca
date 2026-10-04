@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.autor;
 
+import com.github.vittoralemao.biblioteca.livro.LivroRepository;
 import com.github.vittoralemao.biblioteca.nacionalidade.Nacionalidade;
 import com.github.vittoralemao.biblioteca.nacionalidade.NacionalidadeNaoEncontradaException;
 import com.github.vittoralemao.biblioteca.nacionalidade.NacionalidadeRepository;
@@ -17,9 +18,12 @@ public class AutorService {
 
     private final AutorRepository autorRepository;
     private final NacionalidadeRepository nacionalidadeRepository;
+    private final LivroRepository livroRepository;
 
     private static final String AUTOR_NAO_ENCONTRADO = "Autor não encontrado: ";
     private static final String NACIONALIDADE_NAO_ENCONTRADA = "Nacionalidade não encontrada: ";
+    private static final String AUTOR_POSSUI_LIVRO_VINCULADO = "Autor possui livro(s) vinculado(s) e não pode ser excluído: ";
+
 
     @Transactional
     public AutorResponseDTO cadastrar(AutorRequestDTO dto) {
@@ -61,6 +65,10 @@ public class AutorService {
     @Transactional
     public void excluir(UUID id) {
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + id));
+
+        if (livroRepository.existsByAutor(autor)) {
+            throw new AutorPossuiLivroVinculadoException(AUTOR_POSSUI_LIVRO_VINCULADO + id);
+        }
 
         autorRepository.delete(autor);
     }

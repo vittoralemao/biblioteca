@@ -34,5 +34,17 @@ public class ApiExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
+    @ExceptionHandler(EntidadeEmUsoException.class)
+    public ResponseEntity<ErroResponseDTO> trataEntidadeEmUso(EntidadeEmUsoException ex){
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                List.of()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.categoria;
 
+import com.github.vittoralemao.biblioteca.livro.LivroRepository;
 import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,12 @@ import java.util.UUID;
 public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
+    private final LivroRepository livroRepository;
 
     private static final String CATEGORIA_NAO_ENCONTRADA = "Categoria não encontrada: ";
+    private static final String CATEGORIA_POSSUI_LIVRO_VINCULADO = "Categoria possui livro(s) vinculado(s) e não pode ser excluído: ";
+
+
 
     @Transactional
     public CategoriaResponseDTO cadastrar(CategoriaRequestDTO dto){
@@ -71,6 +76,11 @@ public class CategoriaService {
         Categoria categoria = categoriaRepository.
                 findById(id).
                 orElseThrow(() -> new CategoriaNaoEncontradaException(CATEGORIA_NAO_ENCONTRADA + id));
+
+        if(livroRepository.existsByCategoria((categoria))){
+            throw new CategoriaComLivroVinculadoException(CATEGORIA_POSSUI_LIVRO_VINCULADO + id);
+        }
+
         categoriaRepository.delete(categoria);
     }
 

@@ -1,6 +1,7 @@
 package com.github.vittoralemao.biblioteca.livro;
 
 import com.github.vittoralemao.biblioteca.autor.Autor;
+import com.github.vittoralemao.biblioteca.categoria.Categoria;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,9 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     List<Livro> findByAnoPublicacaoBetween(Integer anoInicio, Integer anoFim);
     List<Livro> findByIsbnIsNull();
     List<Livro> findByAnoPublicacaoIn(List<Integer> anos);
+
+    boolean existsByAutor(Autor autor);
+    boolean existsByCategoria(Categoria categoria);
 
     boolean existsByIsbn(@Nullable String isbn);
     boolean existsByIsbnAndIdNot(@Nullable String isbn, UUID id);
