@@ -46,5 +46,16 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 
+    @ExceptionHandler(CredenciaisInvalidasException.class)
+    public ResponseEntity<ErroResponseDTO> trataCredenciaisInvalidas(CredenciaisInvalidasException e){
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                HttpStatus.UNAUTHORIZED.value(),
+                e.getMessage(),
+                List.of());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
+    }
+
+
 
 }
