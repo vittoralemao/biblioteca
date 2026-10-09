@@ -3,7 +3,7 @@ spring:
     name: biblioteca
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DB:biblioteca_db}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:biblioteca_db}
     username: ${POSTGRES_USER:biblioteca}
     password: ${POSTGRES_PASSWORD:biblioteca}
     driver-class-name: org.postgresql.Driver
