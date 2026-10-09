@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +25,7 @@ public class LivroController {
 
     private final LivroService livroService;
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Livro cadastrado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -66,6 +68,7 @@ public class LivroController {
         return ResponseEntity.ok(livros);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Livro atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -85,6 +88,7 @@ public class LivroController {
         return ResponseEntity.ok(livro);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Livro excluído com sucesso"),
             @ApiResponse(responseCode = "404", description = "Livro não encontrado",

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +25,7 @@ public class CategoriaController {
 
     private final CategoriaService categoriaService;
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -65,6 +67,7 @@ public class CategoriaController {
         return ResponseEntity.ok(categorias);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -84,6 +87,7 @@ public class CategoriaController {
         return ResponseEntity.ok(categoria);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Categoria excluída com sucesso"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada",

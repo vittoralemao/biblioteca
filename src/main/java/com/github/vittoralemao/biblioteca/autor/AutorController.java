@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +25,7 @@ public class AutorController {
 
     private final AutorService autorService;
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Autor cadastrado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -70,6 +72,7 @@ public class AutorController {
         return ResponseEntity.ok(autores);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autor atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -89,6 +92,7 @@ public class AutorController {
         return ResponseEntity.ok(autor);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Autor excluído com sucesso"),
             @ApiResponse(responseCode = "404", description = "Autor não encontrado",

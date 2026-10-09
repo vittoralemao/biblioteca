@@ -5,11 +5,11 @@ body:
   type: json
   content: "{\r
 
-    \    \"nome\":\"George Orwell\",\r
+    \    \"nome\":\"NOME\",\r
 
-    \    \"dataNascimento\":\"1903-06-25\",\r
+    \    \"dataNascimento\":\"DATA_NASCIMENTO\",\r
 
-    \    \"nacionalidade\":\"BRITANICO\"\r
+    \    \"nacionalidadeId\":\"NACIONALIDADE_ID\"\r
 
     }"
 order: 705570453464

@@ -1,7 +1,8 @@
 $kind: http-request
-url: http://localhost:8080/autores?nacionalidade&nome
+url: http://localhost:8080/autores
 method: GET
-queryParams:
-  nome:
-  nacionalidade:
+auth:
+  type: bearer
+  credentials:
+    token: ""
 order: 765694881186

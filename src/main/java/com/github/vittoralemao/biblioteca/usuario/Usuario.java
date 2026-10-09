@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.usuario;
 
+import com.github.vittoralemao.biblioteca.share.EntidadeAuditavel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,14 @@ import java.util.UUID;
 @Table(name = "usuario")
 @Getter
 @NoArgsConstructor
-public class Usuario implements UserDetails {
+public class Usuario extends EntidadeAuditavel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
+    private String nome;
 
     @Column(nullable = false, unique = true)
     private String login;
@@ -44,5 +48,12 @@ public class Usuario implements UserDetails {
     @Override
     public String getUsername(){
         return login;
+    }
+
+    public Usuario(String nome, String login, String senha, Papel papel){
+        this.nome = nome;
+        this.login = login;
+        this.senha = senha;
+        this.papel = papel;
     }
 }

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +25,7 @@ public class NacionalidadeController {
 
     private final NacionalidadeService nacionalidadeService;
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Nacionalidade cadastrada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -67,6 +69,7 @@ public class NacionalidadeController {
         return ResponseEntity.ok(nacionalidades);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Nacionalidade atualizada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
@@ -86,6 +89,7 @@ public class NacionalidadeController {
         return ResponseEntity.ok(nacionalidade);
     }
 
+    @PreAuthorize("hasRole('GERENTE')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Nacionalidade excluída com sucesso"),
             @ApiResponse(responseCode = "404", description = "Nacionalidade não encontrada",

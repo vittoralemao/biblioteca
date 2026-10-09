@@ -1,0 +1,5 @@
+$kind: http-request
+name: Cadastra novo Usuario
+url: ""
+method: GET
+order: 1791546636590

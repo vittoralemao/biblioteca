@@ -1,5 +1,7 @@
 package com.github.vittoralemao.biblioteca.usuario;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +31,28 @@ public class JwtService {
                 .expiration(expiracao)
                 .signWith(getChave())
                 .compact();
+    }
+
+    public String extrairLogin(String token){
+        return extrairClaims(token).getSubject();
+    }
+
+    public boolean tokenValido(String token){
+        try {
+            Claims claims = extrairClaims(token);
+            return claims.getExpiration().after(new Date());
+        } catch (JwtException | IllegalArgumentException _) {
+            return false;
+        }
+    }
+
+
+    public Claims extrairClaims(String token){
+        return Jwts.parser()
+                .verifyWith(getChave())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     private SecretKey getChave() {
