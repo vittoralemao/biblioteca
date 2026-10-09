@@ -2,6 +2,17 @@
 
 Projeto de estudo e portfólio para praticar Spring Boot, Spring Data JPA, Spring Security e Spring Cloud, construído do zero em paralelo a um curso de Spring Boot.
 
+## 🌐 Demo ao vivo
+
+A API está publicada e pode ser testada agora mesmo, sem precisar rodar nada localmente:
+
+- **Aplicação**: https://biblioteca-9eu0.onrender.com
+- **Documentação interativa (Swagger)**: https://biblioteca-9eu0.onrender.com/swagger-ui/index.html
+
+> ⚠️ Hospedada no plano gratuito do [Render](https://render.com) — a instância "dorme" após um período sem uso, então a primeira requisição depois de um tempo parado pode demorar até ~50 segundos para responder (as seguintes voltam ao normal). O banco de dados roda no [Supabase](https://supabase.com).
+
+Para testar as rotas protegidas, use as credenciais do usuário semeado (seção abaixo) para fazer login e obter um token.
+
 ## 🚀 Tecnologias
 
 - Java 26
@@ -100,9 +111,10 @@ Este projeto está em desenvolvimento ativo e sendo construído de forma increme
 - Documentação completa da API com Swagger/OpenAPI, incluindo exemplos de request/response e todos os códigos de status documentados (`200`, `201`, `204`, `400`, `401`, `403`, `404`, `409`)
 - Collection do Postman versionada no repositório, cobrindo todos os endpoints
 
+- **Deploy em produção** (Render + Supabase), com a mesma pipeline de autenticação/autorização validada em ambiente real
+
 ### 🔜 Próximos passos
 - Testes unitários de camada Service
-- Spring Cloud / Deploy
 
 ## 📄 Licença
 
