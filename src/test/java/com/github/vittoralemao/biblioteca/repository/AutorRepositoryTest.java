@@ -1,11 +1,11 @@
 package com.github.vittoralemao.biblioteca.repository;
 
-import com.github.vittoralemao.biblioteca.autor.AutorRepository;
+import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;
 import com.github.vittoralemao.biblioteca.config.JpaAuditingConfig;
-import com.github.vittoralemao.biblioteca.autor.Autor;
-import com.github.vittoralemao.biblioteca.livro.Livro;
-import com.github.vittoralemao.biblioteca.nacionalidade.Nacionalidade;
-import com.github.vittoralemao.biblioteca.categoria.Categoria;
+import com.github.vittoralemao.biblioteca.modules.autor.Autor;
+import com.github.vittoralemao.biblioteca.modules.livro.Livro;
+import com.github.vittoralemao.biblioteca.modules.nacionalidade.Nacionalidade;
+import com.github.vittoralemao.biblioteca.modules.categoria.Categoria;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;

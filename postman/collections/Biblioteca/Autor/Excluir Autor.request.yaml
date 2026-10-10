@@ -1,5 +1,0 @@
-$kind: http-request
-description: ""
-url: http://localhost:8080/autores/{id}
-method: DELETE
-order: 767925987812

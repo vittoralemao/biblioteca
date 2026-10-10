@@ -1,5 +1,0 @@
-$kind: http-request
-description: ""
-url: http://localhost:8080/livros/{id}
-method: DELETE
-order: 6000

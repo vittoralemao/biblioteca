@@ -1,4 +1,0 @@
-$kind: http-request
-url: http://localhost:8080/categorias
-method: GET
-order: 767366366618

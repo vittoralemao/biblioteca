@@ -1,6 +1,6 @@
 package com.github.vittoralemao.biblioteca.config;
 
-import com.github.vittoralemao.biblioteca.usuario.JwtAuthenticationFilter;
+import com.github.vittoralemao.biblioteca.modules.usuario.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

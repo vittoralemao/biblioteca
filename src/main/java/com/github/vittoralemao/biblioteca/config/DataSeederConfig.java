@@ -1,8 +1,8 @@
 package com.github.vittoralemao.biblioteca.config;
 
-import com.github.vittoralemao.biblioteca.usuario.Papel;
-import com.github.vittoralemao.biblioteca.usuario.Usuario;
-import com.github.vittoralemao.biblioteca.usuario.UsuarioRepository;
+import com.github.vittoralemao.biblioteca.modules.usuario.Papel;
+import com.github.vittoralemao.biblioteca.modules.usuario.Usuario;
+import com.github.vittoralemao.biblioteca.modules.usuario.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

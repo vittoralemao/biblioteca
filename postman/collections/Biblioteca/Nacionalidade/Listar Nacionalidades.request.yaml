@@ -1,8 +1,0 @@
-$kind: http-request
-url: http://localhost:8080/nacionalidades
-method: GET
-auth:
-  type: bearer
-  credentials:
-    token: ""
-order: 767366366618

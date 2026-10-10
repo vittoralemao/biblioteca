@@ -1,8 +1,8 @@
 package com.github.vittoralemao.biblioteca.exception;
 
-import com.github.vittoralemao.biblioteca.autor.Autor;
-import com.github.vittoralemao.biblioteca.livro.Livro;
-import com.github.vittoralemao.biblioteca.nacionalidade.Nacionalidade;
+import com.github.vittoralemao.biblioteca.modules.autor.Autor;
+import com.github.vittoralemao.biblioteca.modules.livro.Livro;
+import com.github.vittoralemao.biblioteca.modules.nacionalidade.Nacionalidade;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
