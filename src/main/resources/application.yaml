@@ -16,11 +16,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: {JPA_SHOW_SQL:false}
     properties:
       hibernate:
         format_sql: true
 
+server:
+  forward-headers-strategy: framework
+
 jwt:
   secret: ${JWT_SECRET}
   expiracao-minutos: 60
+
+app:
+  admin:
+    email: ${ADMIN_EMAIL:admin@admin.com}
+    senha: ${ADMIN_SENHA:admin}
