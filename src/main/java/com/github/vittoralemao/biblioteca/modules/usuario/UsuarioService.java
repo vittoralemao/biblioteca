@@ -11,17 +11,18 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioResponseDTO cadastrar (CadastroUsuarioRequestDTO request){
-        String senhaCriptografada = passwordEncoder.encode(request.senha());
-
-        Usuario usuario = new Usuario(request.nome(), request.login(), senhaCriptografada, request.papel());
+    public UsuarioResponseDTO cadastrar(CadastroUsuarioRequestDTO request) {
 
         if (usuarioRepository.existsByLogin(request.login())) {
             throw new UsuarioDuplicadoException("Já existe um usuário com o login: " + request.login());
         }
 
+        String senhaCriptografada = passwordEncoder.encode(request.senha());
+
+        Usuario usuario = new Usuario(request.nome(), request.login(), senhaCriptografada, request.papel());
+
         usuario = usuarioRepository.save(usuario);
 
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getUsername(),  usuario.getPapel());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getUsername(), usuario.getPapel());
     }
 }
