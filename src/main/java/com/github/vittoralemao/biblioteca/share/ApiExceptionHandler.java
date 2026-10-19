@@ -79,6 +79,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErroResponseDTO> trataCorpoInvalido(HttpMessageNotReadableException ex) {
 
+        log.debug("Corpo da requisição inválido: {}", ex.getMessage());
+
         ErroResponseDTO erro = new ErroResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "Corpo da requisição inválido ou mal formatado.",
