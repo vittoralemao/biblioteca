@@ -2,6 +2,7 @@ package com.github.vittoralemao.biblioteca.share;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -54,6 +55,21 @@ public class ApiExceptionHandler {
                 e.getMessage(),
                 List.of());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErroResponseDTO> trataErroDeValidacao(MethodArgumentNotValidException ex){
+
+        List<String> erros = ex.getBindingResult().getFieldErrors().stream()
+                .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
+                .toList();
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                "Erro de validação",
+                erros);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
 
