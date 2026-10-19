@@ -4,10 +4,10 @@ import com.github.vittoralemao.biblioteca.modules.livro.LivroRepository;
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.Nacionalidade;
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeNaoEncontradaException;
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeRepository;
-import org.springframework.transaction.annotation.Transactional;
-import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;

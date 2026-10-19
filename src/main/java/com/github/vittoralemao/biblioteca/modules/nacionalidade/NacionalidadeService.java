@@ -1,8 +1,8 @@
 package com.github.vittoralemao.biblioteca.modules.nacionalidade;
 
 import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;
-import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

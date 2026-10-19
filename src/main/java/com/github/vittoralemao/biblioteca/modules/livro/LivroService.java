@@ -6,10 +6,10 @@ import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;
 import com.github.vittoralemao.biblioteca.modules.categoria.Categoria;
 import com.github.vittoralemao.biblioteca.modules.categoria.CategoriaNaoEncontradaException;
 import com.github.vittoralemao.biblioteca.modules.categoria.CategoriaRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;

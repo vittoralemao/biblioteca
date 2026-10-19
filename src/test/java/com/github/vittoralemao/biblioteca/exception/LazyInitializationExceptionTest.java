@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.exception;
 
+import com.github.vittoralemao.biblioteca.config.JpaAuditingConfig;
 import com.github.vittoralemao.biblioteca.modules.autor.Autor;
 import com.github.vittoralemao.biblioteca.modules.livro.Livro;
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.Nacionalidade;
@@ -10,11 +11,10 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import com.github.vittoralemao.biblioteca.config.JpaAuditingConfig;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

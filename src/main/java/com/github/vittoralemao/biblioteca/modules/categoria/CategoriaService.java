@@ -1,8 +1,8 @@
 package com.github.vittoralemao.biblioteca.modules.categoria;
 
 import com.github.vittoralemao.biblioteca.modules.livro.LivroRepository;
-import org.jspecify.annotations.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
