@@ -15,6 +15,11 @@ public class UsuarioService {
         String senhaCriptografada = passwordEncoder.encode(request.senha());
 
         Usuario usuario = new Usuario(request.nome(), request.login(), senhaCriptografada, request.papel());
+
+        if (usuarioRepository.existsByLogin(request.login())) {
+            throw new UsuarioDuplicadoException("Já existe um usuário com o login: " + request.login());
+        }
+
         usuario = usuarioRepository.save(usuario);
 
         return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getUsername(),  usuario.getPapel());
