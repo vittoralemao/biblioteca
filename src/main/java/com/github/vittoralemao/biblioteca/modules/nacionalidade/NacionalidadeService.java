@@ -23,8 +23,12 @@ public class NacionalidadeService {
     public NacionalidadeResponseDTO cadastrar (NacionalidadeRequestDTO dto){
         Nacionalidade nacionalidade = toEntity(dto);
 
-        if(nacionalidadeRepository.existsByNomeAndIso(nacionalidade.getNome(), nacionalidade.getIso())) {
-            throw new NacionalidadeDuplicadaException("Nacionalidade já existente! ");
+        if(nacionalidadeRepository.existsByNome(nacionalidade.getNome())) {
+            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o nome! ");
+        }
+
+        if (nacionalidadeRepository.existsByIso(nacionalidade.getIso())) {
+            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o ISO!");
         }
 
         Nacionalidade nacionalidadeSalva = nacionalidadeRepository.save(nacionalidade);
@@ -37,12 +41,16 @@ public class NacionalidadeService {
                 findById(id)
                 .orElseThrow(() -> new NacionalidadeNaoEncontradaException(NACIONALIDADE_NAO_ENCONTRADA + id));
 
+        if(nacionalidadeRepository.existsByNomeAndIdNot(dto.nome(), id)) {
+            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o nome: " + dto.nome());
+        }
+
+        if(nacionalidadeRepository.existsByIsoAndIdNot(dto.iso(), id)) {
+            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o ISO " + dto.iso());
+        }
+
         nacionalidade.setNome(dto.nome());
         nacionalidade.setIso(dto.iso());
-
-        if(nacionalidadeRepository.existsByNomeAndIsoAndIdNot(nacionalidade.getNome(), nacionalidade.getIso(), nacionalidade.getId())) {
-            throw new NacionalidadeDuplicadaException("Nacionalidade com informações iguais encontrada! ");
-        }
 
         Nacionalidade nacionalidadeSalva = nacionalidadeRepository.save(nacionalidade);
         return NacionalidadeResponseDTO.fromEntity(nacionalidadeSalva);

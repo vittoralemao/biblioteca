@@ -10,6 +10,10 @@ public interface NacionalidadeRepository extends JpaRepository <Nacionalidade, U
     List<Nacionalidade> findByNomeContainingIgnoreCase(String nome);
     List<Nacionalidade> findByIsoContainingIgnoreCase(String iso);
 
-    boolean existsByNomeAndIso(String nome, String iso);
-    boolean existsByNomeAndIsoAndIdNot(String nome, String iso, UUID id);
+    boolean existsByNome(String nome);
+    boolean existsByIso(String iso);
+
+    boolean existsByNomeAndIdNot(String nome, UUID id);
+    boolean existsByIsoAndIdNot(String iso, UUID id);
+
 }
