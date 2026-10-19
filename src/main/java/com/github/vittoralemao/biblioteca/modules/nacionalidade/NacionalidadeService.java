@@ -46,7 +46,7 @@ public class NacionalidadeService {
         }
 
         if(nacionalidadeRepository.existsByIsoAndIdNot(dto.iso(), id)) {
-            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o ISO " + dto.iso());
+            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o ISO: " + dto.iso());
         }
 
         nacionalidade.setNome(dto.nome());

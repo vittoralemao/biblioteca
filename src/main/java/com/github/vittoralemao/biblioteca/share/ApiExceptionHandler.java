@@ -2,6 +2,7 @@ package com.github.vittoralemao.biblioteca.share;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -68,6 +69,18 @@ public class ApiExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Erro de validação",
                 erros);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErroResponseDTO> trataCorpoInvalido(HttpMessageNotReadableException ex) {
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                "Corpo da requisição inválido ou mal formatado.",
+                List.of()
+        );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
