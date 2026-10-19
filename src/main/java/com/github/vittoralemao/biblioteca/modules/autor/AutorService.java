@@ -51,13 +51,13 @@ public class AutorService {
                 dto.nacionalidadeId())
                 .orElseThrow(() -> new NacionalidadeNaoEncontradaException(NACIONALIDADE_NAO_ENCONTRADA + dto.nacionalidadeId()));
 
+        if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidadeAndIdNot(dto.nome(), dto.dataNascimento(), nacionalidade, autor.getId())) {
+            throw new AutorDuplicadoException("Autor com informações iguais encontrado! ");
+        }
+
         autor.setNome(dto.nome());
         autor.setDataNascimento(dto.dataNascimento());
         autor.setNacionalidade(nacionalidade);
-
-        if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidadeAndIdNot(autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade(), autor.getId())) {
-            throw new AutorDuplicadoException("Autor com informações iguais encontrado! ");
-        }
 
         Autor autorSalvo = autorRepository.save(autor);
         return AutorResponseDTO.fromEntity(autorSalvo);
