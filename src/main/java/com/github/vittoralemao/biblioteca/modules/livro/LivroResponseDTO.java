@@ -12,7 +12,7 @@ public record LivroResponseDTO(
         AutorResponseDTO autor,
         CategoriaResponseDTO categoria,
         @Nullable String isbn,
-        Integer anoPublicacao
+        @Nullable Integer anoPublicacao
 ) {
     public static LivroResponseDTO fromEntity(Livro livro){
       return new LivroResponseDTO(

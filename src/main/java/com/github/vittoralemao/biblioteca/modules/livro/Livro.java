@@ -40,5 +40,6 @@ public class Livro extends EntidadeAuditavel {
     private String isbn;
 
     @Column(name = "ano_publicacao")
+    @Nullable
     private Integer anoPublicacao;
 }

@@ -2,6 +2,7 @@ package com.github.vittoralemao.biblioteca.modules.livro;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -15,8 +16,10 @@ public record LivroRequestDTO(
         @NotNull(message = "A categoria é obrigatória")
         UUID categoriaId,
 
+        @Nullable
         String isbn,
 
+        @Nullable
         Integer anoPublicacao
 ) {
 }
