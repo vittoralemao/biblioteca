@@ -1,5 +1,7 @@
 package com.github.vittoralemao.biblioteca.share;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
@@ -83,6 +86,20 @@ public class ApiExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroResponseDTO> trataViolacaoDeIntegridade(DataIntegrityViolationException ex) {
+
+        log.warn("Violação de integridade no banco: {}", ex.getMostSpecificCause().getMessage());
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                HttpStatus.CONFLICT.value(),
+                "A operação conflita com dados já existentes.",
+                List.of()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
 
 
