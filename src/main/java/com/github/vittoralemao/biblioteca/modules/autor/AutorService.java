@@ -48,7 +48,7 @@ public class AutorService {
 
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + id));
         Nacionalidade nacionalidade = nacionalidadeRepository.findById(
-                dto.nacionalidadeId())
+                        dto.nacionalidadeId())
                 .orElseThrow(() -> new NacionalidadeNaoEncontradaException(NACIONALIDADE_NAO_ENCONTRADA + dto.nacionalidadeId()));
 
         if (autorRepository.existsByNomeAndDataNascimentoAndNacionalidadeAndIdNot(dto.nome(), dto.dataNascimento(), nacionalidade, autor.getId())) {
@@ -62,6 +62,7 @@ public class AutorService {
         Autor autorSalvo = autorRepository.save(autor);
         return AutorResponseDTO.fromEntity(autorSalvo);
     }
+
     @Transactional
     public void excluir(UUID id) {
         Autor autor = autorRepository.findById(id).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + id));
@@ -80,7 +81,7 @@ public class AutorService {
 
         if (nome != null && nacionalidade != null) {
             autores = autorRepository.findByNomeContainingIgnoreCaseAndNacionalidade_NomeContainingIgnoreCase(nome, nacionalidade);
-        } else if (nome != null){
+        } else if (nome != null) {
             autores = autorRepository.findByNomeContainingIgnoreCase(nome);
         } else if (nacionalidade != null) {
             autores = autorRepository.findByNacionalidade_NomeContainingIgnoreCase(nacionalidade);
@@ -95,8 +96,8 @@ public class AutorService {
 
     private Autor toEntity(AutorRequestDTO dto) {
 
-        Nacionalidade nacionalidade  = nacionalidadeRepository.findById(
-                dto.nacionalidadeId())
+        Nacionalidade nacionalidade = nacionalidadeRepository.findById(
+                        dto.nacionalidadeId())
                 .orElseThrow(() -> new NacionalidadeNaoEncontradaException(NACIONALIDADE_NAO_ENCONTRADA + dto.nacionalidadeId()));
 
         Autor autor = new Autor();
