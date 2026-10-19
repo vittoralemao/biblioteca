@@ -31,6 +31,7 @@ public class AutenticacaoEntryPoint implements AuthenticationEntryPoint {
         );
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(erro));
 
