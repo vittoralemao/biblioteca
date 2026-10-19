@@ -19,7 +19,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AutenticacaoEntryPoint autenticacaoEntryPoint, AutorizacaoNegadaHandler autorizacaoNegadaHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AutenticacaoEntryPoint autenticacaoEntryPoint, AutorizacaoNegadaHandler autorizacaoNegadaHandler){
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
