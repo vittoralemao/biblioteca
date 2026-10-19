@@ -24,11 +24,11 @@ public class NacionalidadeService {
         Nacionalidade nacionalidade = toEntity(dto);
 
         if(nacionalidadeRepository.existsByNome(nacionalidade.getNome())) {
-            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o nome! ");
+            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o nome: " + dto.nome());
         }
 
         if (nacionalidadeRepository.existsByIso(nacionalidade.getIso())) {
-            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o ISO!");
+            throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o ISO: " + dto.iso());
         }
 
         Nacionalidade nacionalidadeSalva = nacionalidadeRepository.save(nacionalidade);
