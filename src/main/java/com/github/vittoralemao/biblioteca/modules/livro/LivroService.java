@@ -64,21 +64,21 @@ public class LivroService {
                 findById(dto.categoriaId()).
                 orElseThrow(() -> new CategoriaNaoEncontradaException(CATEGORIA_NAO_ENCONTRADA + dto.categoriaId()));
 
+        if (dto.isbn() != null){
+            if (livroRepository.existsByIsbnAndIdNot(dto.isbn(), id)) {
+                throw new LivroDuplicadoException("Livro com informações iguais encontrado! ");
+            }
+        } else {
+            if (livroRepository.existsByTituloAndAutorAndIdNot(dto.titulo(), autor, id)){
+                throw new LivroDuplicadoException("Livro com informações iguais encontrado! ");
+            }
+        }
+
         livro.setTitulo(dto.titulo());
         livro.setAutor(autor);
         livro.setCategoria(categoria);
         livro.setIsbn(dto.isbn());
         livro.setAnoPublicacao(dto.anoPublicacao());
-
-        if (livro.getIsbn() != null){
-            if (livroRepository.existsByIsbnAndIdNot(livro.getIsbn(), livro.getId())) {
-                throw new LivroDuplicadoException("Livro com informações iguais encontrado! ");
-            }
-        } else {
-            if (livroRepository.existsByTituloAndAutorAndIdNot(livro.getTitulo(), livro.getAutor(), livro.getId())){
-                throw new LivroDuplicadoException("Livro com informações iguais encontrado! ");
-            }
-        }
 
         Livro livroSalvo = livroRepository.save(livro);
         return LivroResponseDTO.fromEntity(livroSalvo);

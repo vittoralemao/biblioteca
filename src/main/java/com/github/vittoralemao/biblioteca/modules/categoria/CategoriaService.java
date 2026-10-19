@@ -39,10 +39,12 @@ public class CategoriaService {
                 findById(id).
                 orElseThrow(() -> new CategoriaNaoEncontradaException(CATEGORIA_NAO_ENCONTRADA + id));
 
-        categoria.setNome(dto.nome());
-        if (categoriaRepository.existsByNomeAndIdNot(categoria.getNome(), categoria.getId())){
-            throw new CategoriaDuplicadaException("Categoria com informações iguais encontrada! ");
+
+        if (categoriaRepository.existsByNomeAndIdNot(dto.nome(), categoria.getId())){
+            throw new CategoriaDuplicadaException("Já existe categoria com o nome: " + dto.nome());
         }
+
+        categoria.setNome(dto.nome());
 
         Categoria categoriaSalva = categoriaRepository.save(categoria);
         return CategoriaResponseDTO.fromEntity(categoriaSalva);
