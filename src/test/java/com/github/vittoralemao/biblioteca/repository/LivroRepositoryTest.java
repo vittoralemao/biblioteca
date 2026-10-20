@@ -24,8 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class LivroRepositoryTest {
 
-    private static final String TITULO_TESTE = "Clean Code";
-    private static final String AUTOR_TESTE = "Robert C. Martin";
+    private static final String TITULO_TESTE = "TITULO TESTE";
+    private static final String AUTOR_TESTE = "AUTOR TESTE";
     private static final LocalDate DATA_NASCIMENTO_TESTE = LocalDate.of(1903, 6, 25);
     private static final String ISBN_TESTE = "978-85-508-0200-0";
 
@@ -80,14 +80,14 @@ class LivroRepositoryTest {
 
     private Nacionalidade criaNacionalidadeTest(){
         Nacionalidade nacionalidade = new Nacionalidade();
-        nacionalidade.setNome("BRITANICO");
-        nacionalidade.setIso("GBR");
+        nacionalidade.setNome("NACIONALIDADE TESTE");
+        nacionalidade.setIso("TST");
         return entityManager.persistAndFlush(nacionalidade);
     }
 
     private Categoria criaCategoriaTest(){
         Categoria categoria = new Categoria();
-        categoria.setNome("FICCAO");
+        categoria.setNome("CATEGORIA TESTE");
         return entityManager.persistAndFlush(categoria);
     }
 

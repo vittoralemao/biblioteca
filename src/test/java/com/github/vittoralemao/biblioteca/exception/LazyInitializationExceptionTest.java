@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class LazyInitializationExceptionTest {
 
-    private static final String NOME_TESTE = "George Orwell";
+    private static final String NOME_TESTE = "NOME TESTE";
     private static final LocalDate DATA_NASCIMENTO_TESTE = LocalDate.of(1903, 6, 25);
 
     @Autowired
@@ -53,8 +53,8 @@ class LazyInitializationExceptionTest {
 
     private Nacionalidade criaNacionalidadeTest(){
         Nacionalidade nacionalidade = new Nacionalidade();
-        nacionalidade.setNome("BRITANICO");
-        nacionalidade.setIso("GBR");
+        nacionalidade.setNome("NACIONALIDADE TESTE");
+        nacionalidade.setIso("TST");
         return entityManager.persistAndFlush(nacionalidade);
     }
 }

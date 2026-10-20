@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AutorRepositoryTest {
 
-    private static final String NOME_TESTE = "George Orwell";
+    private static final String NOME_TESTE = "NOME TESTE";
     private static final LocalDate DATA_NASCIMENTO_TESTE = LocalDate.of(1903, 6, 25);
-    private static final String TITULO_TESTE = "1984";
+    private static final String TITULO_TESTE = "TITULO TESTE";
 
     @Autowired
     private AutorRepository autorRepository;
@@ -100,14 +100,14 @@ class AutorRepositoryTest {
 
     private Nacionalidade criaNacionalidadeTest(){
         Nacionalidade nacionalidade = new Nacionalidade();
-        nacionalidade.setNome("BRITANICO");
-        nacionalidade.setIso("GBR");
+        nacionalidade.setNome("NACIONALIDADE TESTE");
+        nacionalidade.setIso("TST");
         return entityManager.persistAndFlush(nacionalidade);
     }
 
     private Categoria criaCategoriaTest(){
         Categoria categoria = new Categoria();
-        categoria.setNome("FICCAO");
+        categoria.setNome("CATEGORIA TESTE");
         return entityManager.persistAndFlush(categoria);
     }
 
