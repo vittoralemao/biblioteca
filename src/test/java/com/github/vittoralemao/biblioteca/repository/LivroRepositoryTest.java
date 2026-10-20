@@ -13,11 +13,13 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @Import(JpaAuditingConfig.class)
@@ -61,21 +63,21 @@ class LivroRepositoryTest {
 
     @Test
     void deveSalvarEValidarLivroEAutorEmCascata(){
+        Autor autorNaoSalvo = new Autor();
+        autorNaoSalvo.setNome(AUTOR_TESTE);
+        autorNaoSalvo.setNacionalidade(criaNacionalidadeTest());
+        autorNaoSalvo.setDataNascimento(DATA_NASCIMENTO_TESTE);
+
         Livro livro = new Livro();
         livro.setTitulo(TITULO_TESTE);
         livro.setIsbn(ISBN_TESTE);
         livro.setCategoria(criaCategoriaTest());
         livro.setAnoPublicacao(2008);
+        livro.setAutor(autorNaoSalvo);
 
-        Autor autor = new Autor();
-        autor.setNome(AUTOR_TESTE);
-        autor.setNacionalidade(criaNacionalidadeTest());
-        autor.setDataNascimento(DATA_NASCIMENTO_TESTE);
-        livro.setAutor(autor);
-        livroRepository.save(livro);
-
-        assertThat(autor.getId()).isNotNull();
-        assertThat(livro.getId()).isNotNull();
+        assertThatThrownBy(() -> livroRepository.save(livro))
+                .isInstanceOf(InvalidDataAccessApiUsageException.class)
+                .hasCauseInstanceOf(IllegalStateException.class);
     }
 
     private Nacionalidade criaNacionalidadeTest(){
