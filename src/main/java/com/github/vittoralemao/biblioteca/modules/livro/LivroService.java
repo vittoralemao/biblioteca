@@ -27,15 +27,15 @@ public class LivroService {
     private static final String CATEGORIA_NAO_ENCONTRADA = "Categoria não encontrada: ";
 
     @Transactional
-    public LivroResponseDTO cadastrar(LivroRequestDTO dto){
+    public LivroResponseDTO cadastrar(LivroRequestDTO dto) {
         Livro livro = toEntity(dto);
 
-        if (livro.getIsbn() != null){
+        if (livro.getIsbn() != null) {
             if (livroRepository.existsByIsbn(livro.getIsbn())) {
                 throw new LivroDuplicadoException("Livro já existente!");
             }
         } else {
-            if (livroRepository.existsByTituloAndAutor(livro.getTitulo(), livro.getAutor())){
+            if (livroRepository.existsByTituloAndAutor(livro.getTitulo(), livro.getAutor())) {
                 throw new LivroDuplicadoException("Livro já existente!");
             }
         }
@@ -45,7 +45,7 @@ public class LivroService {
     }
 
     @Transactional(readOnly = true)
-    public LivroResponseDTO buscarPorId(UUID id){
+    public LivroResponseDTO buscarPorId(UUID id) {
         Livro livro = livroRepository.
                 buscarLivroComAutorECategoria(id).
                 orElseThrow(() -> new LivroNaoEncontradoException(LIVRO_NAO_ENCONTRADO + id));
@@ -53,7 +53,7 @@ public class LivroService {
     }
 
     @Transactional
-    public LivroResponseDTO atualizar(UUID id, LivroRequestDTO dto){
+    public LivroResponseDTO atualizar(UUID id, LivroRequestDTO dto) {
         Livro livro = livroRepository.
                 findById(id).
                 orElseThrow(() -> new LivroNaoEncontradoException(LIVRO_NAO_ENCONTRADO + id));
@@ -64,12 +64,12 @@ public class LivroService {
                 findById(dto.categoriaId()).
                 orElseThrow(() -> new CategoriaNaoEncontradaException(CATEGORIA_NAO_ENCONTRADA + dto.categoriaId()));
 
-        if (dto.isbn() != null){
+        if (dto.isbn() != null) {
             if (livroRepository.existsByIsbnAndIdNot(dto.isbn(), id)) {
                 throw new LivroDuplicadoException("Livro com informações iguais encontrado! ");
             }
         } else {
-            if (livroRepository.existsByTituloAndAutorAndIdNot(dto.titulo(), autor, id)){
+            if (livroRepository.existsByTituloAndAutorAndIdNot(dto.titulo(), autor, id)) {
                 throw new LivroDuplicadoException("Livro com informações iguais encontrado! ");
             }
         }
@@ -85,7 +85,7 @@ public class LivroService {
     }
 
     @Transactional
-    public void excluir(UUID id){
+    public void excluir(UUID id) {
         Livro livro = livroRepository.
                 findById(id).
                 orElseThrow(() -> new LivroNaoEncontradoException(LIVRO_NAO_ENCONTRADO + id));
@@ -93,12 +93,12 @@ public class LivroService {
     }
 
     @Transactional(readOnly = true)
-    public List<LivroResponseDTO> listar(@Nullable String titulo, @Nullable String autor, @Nullable String categoria){
+    public List<LivroResponseDTO> listar(@Nullable String titulo, @Nullable String autor, @Nullable String categoria) {
         List<Livro> livros;
 
         if (titulo != null && autor != null && categoria != null) {
             livros = livroRepository.findByTituloContainingIgnoreCaseAndAutor_NomeContainingIgnoreCaseAndCategoria_NomeContainingIgnoreCase(titulo, autor, categoria);
-        } else if (autor != null && categoria != null){
+        } else if (autor != null && categoria != null) {
             livros = livroRepository.findByAutor_NomeContainingIgnoreCaseAndCategoria_NomeContainingIgnoreCase(autor, categoria);
         } else if (titulo != null && categoria != null) {
             livros = livroRepository.findByTituloContainingIgnoreCaseAndCategoria_NomeContainingIgnoreCase(titulo, categoria);
@@ -119,7 +119,7 @@ public class LivroService {
                 .toList();
     }
 
-    private Livro toEntity(LivroRequestDTO dto){
+    private Livro toEntity(LivroRequestDTO dto) {
         Autor autor = autorRepository.findById(dto.autorId()).orElseThrow(() -> new AutorNaoEncontradoException(AUTOR_NAO_ENCONTRADO + dto.autorId()));
         Categoria categoria = categoriaRepository.findById(dto.categoriaId()).orElseThrow(() -> new CategoriaNaoEncontradaException(CATEGORIA_NAO_ENCONTRADA + dto.categoriaId()));
 
