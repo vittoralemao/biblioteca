@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,4 +28,8 @@ public abstract class EntidadeAuditavel {
     @LastModifiedBy
     @Column(name = "usuario_ultima_atualizacao")
     private String usuarioUltimaAtualizacao;
+
+    @CreatedBy
+    @Column(name = "usuario_cadastro", updatable = false)
+    private String usuarioCadastro;
 }
