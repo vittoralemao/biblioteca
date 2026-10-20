@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.modules.nacionalidade;
 
+import com.github.vittoralemao.biblioteca.share.EntidadeAuditavel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Table(name = "nacionalidades")
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 
-public class Nacionalidade {
+public class Nacionalidade extends EntidadeAuditavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

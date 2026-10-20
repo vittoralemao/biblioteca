@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.modules.categoria;
 
+import com.github.vittoralemao.biblioteca.share.EntidadeAuditavel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Categoria {
+public class Categoria extends EntidadeAuditavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
