@@ -24,9 +24,6 @@ public class NacionalidadeServiceTest {
     NacionalidadeRepository nacionalidadeRepository;
 
     @Mock
-    NacionalidadeController nacionalidadeController;
-
-    @Mock
     AutorRepository autorRepository;
 
     @Test

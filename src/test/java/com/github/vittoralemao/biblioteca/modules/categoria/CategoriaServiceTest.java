@@ -24,9 +24,6 @@ public class CategoriaServiceTest {
     @Mock
     private CategoriaRepository categoriaRepository;
 
-    @Mock
-    private CategoriaController categoriaController;
-
     @InjectMocks
     private CategoriaService categoriaService;
 
