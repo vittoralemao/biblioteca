@@ -177,7 +177,6 @@ public class LivroServiceTest {
                 .isInstanceOf(AutorNaoEncontradoException.class);
 
         verifyNoInteractions(categoriaRepository, livroRepository);
-        verify(livroRepository, never()).save(any(Livro.class));
     }
 
     @Test
@@ -198,7 +197,6 @@ public class LivroServiceTest {
                 .isInstanceOf(CategoriaNaoEncontradaException.class);
 
         verifyNoInteractions(livroRepository);
-        verify(livroRepository, never()).save(any(Livro.class));
     }
 
     @BeforeEach
