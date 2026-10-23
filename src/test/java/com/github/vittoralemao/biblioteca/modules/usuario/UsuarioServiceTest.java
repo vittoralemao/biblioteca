@@ -8,8 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -27,7 +25,7 @@ public class UsuarioServiceTest {
     UsuarioRepository usuarioRepository;
 
     @Test
-    void deveCadastrarUsuarioComSenhaCriptografada(){
+    void deveCadastrarUsuarioComSenhaCriptografada() {
         CadastroUsuarioRequestDTO dto = new CadastroUsuarioRequestDTO(
                 "demo",
                 "demo@demo.com",
@@ -51,7 +49,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    void naoDeveCadastrarUsuarioComLoginDuplicado(){
+    void naoDeveCadastrarUsuarioComLoginDuplicado() {
         CadastroUsuarioRequestDTO dto = new CadastroUsuarioRequestDTO(
                 "demo",
                 "demo@demo.com",
@@ -64,7 +62,6 @@ public class UsuarioServiceTest {
         verify(usuarioRepository, never()).save(any());
         verifyNoInteractions(passwordEncoder);
     }
-
 
 
 }
