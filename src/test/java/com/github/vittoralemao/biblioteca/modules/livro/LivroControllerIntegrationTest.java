@@ -44,6 +44,9 @@ public class LivroControllerIntegrationTest {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    private UUID autorId;
+    private UUID categoriaId;
+
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveCadastrarLivroERetornar201() throws Exception {
@@ -125,11 +128,9 @@ public class LivroControllerIntegrationTest {
                                 """.formatted(categoriaId)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(400));
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.errors").isNotEmpty());
     }
-
-    private UUID autorId;
-    private UUID categoriaId;
 
     @BeforeEach
     void setUp() {
