@@ -1,0 +1,154 @@
+package com.github.vittoralemao.biblioteca.modules.livro;
+
+
+import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
+import com.github.vittoralemao.biblioteca.modules.autor.Autor;
+import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;
+import com.github.vittoralemao.biblioteca.modules.categoria.Categoria;
+import com.github.vittoralemao.biblioteca.modules.categoria.CategoriaRepository;
+import com.github.vittoralemao.biblioteca.modules.nacionalidade.Nacionalidade;
+import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+@SpringBootTest(properties = "jwt.secret=chave-somente-para-testes-com-pelo-menos-32-bytes")
+@AutoConfigureMockMvc
+@Import(TestContainerConfiguration.class)
+@Transactional
+public class LivroControllerIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private NacionalidadeRepository nacionalidadeRepository;
+
+    @Autowired
+    private AutorRepository autorRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveCadastrarLivroERetornar201() throws Exception {
+        mockMvc.perform(post("/livros")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                "titulo": "1984",
+                                "autorId": "%s",
+                                "categoriaId": "%s",
+                                "isbn": "9788535914849",
+                                "anoPublicacao": 1949
+                                }
+                                """.formatted(autorId, categoriaId)))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"))
+                .andExpect(jsonPath("$.titulo").value("1984"))
+                .andExpect(jsonPath("$.id").isNotEmpty());
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar404QuandoOAutorNaoExiste() throws Exception {
+        mockMvc.perform(post("/livros")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                "titulo": "1984",
+                                "autorId": "%s",
+                                "categoriaId": "%s",
+                                "isbn": "9788535914849",
+                                "anoPublicacao": 1949
+                                }
+                                """.formatted(UUID.randomUUID(), categoriaId)))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404));
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar409QuandoOIsbnJaExiste() throws Exception {
+
+        String livroJson = """
+                {
+                "titulo": "1984",
+                "autorId": "%s",
+                "categoriaId": "%s",
+                "isbn": "9788535914849",
+                "anoPublicacao": 1949
+                }
+                """.formatted(autorId, categoriaId);
+
+        mockMvc.perform(post("/livros")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(livroJson))
+                .andExpect(status().isCreated());
+        mockMvc.perform(post("/livros")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(livroJson))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409));
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar400QuandoOAutorNaoEInformado() throws Exception {
+        mockMvc.perform(post("/livros")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                "titulo": "1984",
+                                "categoriaId": "%s",
+                                "isbn": "9788535914849",
+                                "anoPublicacao": 1949
+                                }
+                                """.formatted(categoriaId)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
+    }
+
+    private UUID autorId;
+    private UUID categoriaId;
+
+    @BeforeEach
+    void setUp() {
+        Nacionalidade nacionalidade = new Nacionalidade();
+        nacionalidade.setNome("BRASILEIRA");
+        nacionalidade.setIso("BRA");
+
+        nacionalidade = nacionalidadeRepository.save(nacionalidade);
+
+        Autor autor = new Autor();
+        autor.setNome("AUTOR");
+        autor.setNacionalidade(nacionalidade);
+        autor.setDataNascimento(LocalDate.of(2004, 12, 4));
+
+        autorId = autorRepository.save(autor).getId();
+
+        Categoria categoria = new Categoria();
+        categoria.setNome("FICCAO");
+
+        categoriaId = categoriaRepository.save(categoria).getId();
+    }
+}
