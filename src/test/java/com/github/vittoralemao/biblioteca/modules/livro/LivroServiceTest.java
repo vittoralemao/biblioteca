@@ -55,12 +55,7 @@ public class LivroServiceTest {
 
     @Test
     void deveCadastrarLivroComIsbn() {
-        LivroRequestDTO livroDTO = new LivroRequestDTO(
-                livro.getTitulo(),
-                autorId,
-                categoriaId,
-                livro.getIsbn(),
-                livro.getAnoPublicacao());
+        LivroRequestDTO livroDTO = criaDto(livro.getIsbn());
 
         when(autorRepository.findById(autorId))
                 .thenReturn(Optional.of(autor));
@@ -86,12 +81,7 @@ public class LivroServiceTest {
 
     @Test
     void deveCadastrarLivroSemIsbn() {
-        LivroRequestDTO livroDTO = new LivroRequestDTO(
-                livro.getTitulo(),
-                autorId,
-                categoriaId,
-                null,
-                livro.getAnoPublicacao());
+        LivroRequestDTO livroDTO = criaDto(null);
 
         when(autorRepository.findById(autorId))
                 .thenReturn(Optional.of(autor));
@@ -117,12 +107,7 @@ public class LivroServiceTest {
 
     @Test
     void naoDeveCadastrarLivroComIsbnDuplicado() {
-        LivroRequestDTO livroDTO = new LivroRequestDTO(
-                livro.getTitulo(),
-                autorId,
-                categoriaId,
-                livro.getIsbn(),
-                livro.getAnoPublicacao());
+        LivroRequestDTO livroDTO = criaDto(livro.getIsbn());
 
         when(autorRepository.findById(autorId))
                 .thenReturn(Optional.of(autor));
@@ -140,12 +125,7 @@ public class LivroServiceTest {
 
     @Test
     void naoDeveCadastrarLivroSemIsbnComTituloEAutorDuplicado() {
-        LivroRequestDTO livroDTO = new LivroRequestDTO(
-                livro.getTitulo(),
-                autorId,
-                categoriaId,
-                null,
-                livro.getAnoPublicacao());
+        LivroRequestDTO livroDTO = criaDto(null);
 
         when(autorRepository.findById(autorId))
                 .thenReturn(Optional.of(autor));
@@ -164,12 +144,7 @@ public class LivroServiceTest {
 
     @Test
     void naoDeveCadastrarLivroComAutorInexistente() {
-        LivroRequestDTO livroDTO = new LivroRequestDTO(
-                livro.getTitulo(),
-                autorId,
-                categoriaId,
-                livro.getIsbn(),
-                livro.getAnoPublicacao());
+        LivroRequestDTO livroDTO = criaDto(livro.getIsbn());
 
         when(autorRepository.findById(autorId)).thenReturn(Optional.empty());
 
@@ -228,5 +203,15 @@ public class LivroServiceTest {
         livro.setCategoria(categoria);
         livro.setIsbn("9788535914849");
         livro.setAnoPublicacao(2008);
+    }
+
+    private LivroRequestDTO criaDto(String isbn){
+        return new LivroRequestDTO(
+                livro.getTitulo(),
+                autorId,
+                categoriaId,
+                isbn,
+                livro.getAnoPublicacao()
+        );
     }
 }

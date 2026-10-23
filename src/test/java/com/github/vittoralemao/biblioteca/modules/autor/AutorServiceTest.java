@@ -20,7 +20,7 @@ import java.util.UUID;
 
 
 @ExtendWith(MockitoExtension.class)
-public class AutoresServiceTest {
+public class AutorServiceTest {
 
 
     @InjectMocks
