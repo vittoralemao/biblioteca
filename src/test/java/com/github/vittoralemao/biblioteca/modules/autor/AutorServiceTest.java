@@ -127,7 +127,7 @@ public class AutorServiceTest {
         assertThatThrownBy(() -> autorService.excluir(autorId))
                 .isInstanceOf(AutorPossuiLivroVinculadoException.class);
 
-        verify(autorRepository, never()).delete(any());
+        verify(autorRepository, never()).delete(any(Autor.class));
     }
 
     @BeforeEach

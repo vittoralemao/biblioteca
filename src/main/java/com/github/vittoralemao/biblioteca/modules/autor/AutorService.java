@@ -6,9 +6,11 @@ import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeNao
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,20 +78,17 @@ public class AutorService {
 
     @Transactional(readOnly = true)
     public List<AutorResponseDTO> listar(@Nullable String nome, @Nullable String nacionalidade) {
+        List<Specification<Autor>> filtros = new ArrayList<>();
 
-        List<Autor> autores;
-
-        if (nome != null && nacionalidade != null) {
-            autores = autorRepository.findByNomeContainingIgnoreCaseAndNacionalidade_NomeContainingIgnoreCase(nome, nacionalidade);
-        } else if (nome != null) {
-            autores = autorRepository.findByNomeContainingIgnoreCase(nome);
-        } else if (nacionalidade != null) {
-            autores = autorRepository.findByNacionalidade_NomeContainingIgnoreCase(nacionalidade);
-        } else {
-            autores = autorRepository.findAll();
+        if (nome != null){
+            filtros.add(AutorSpecifications.nomeContem(nome));
         }
 
-        return autores.stream()
+        if (nacionalidade != null){
+            filtros.add(AutorSpecifications.nacionalidadeContem(nacionalidade));
+        }
+
+        return autorRepository.findAll(Specification.allOf(filtros)).stream()
                 .map(AutorResponseDTO::fromEntity)
                 .toList();
     }
