@@ -8,9 +8,11 @@ import com.github.vittoralemao.biblioteca.modules.categoria.CategoriaNaoEncontra
 import com.github.vittoralemao.biblioteca.modules.categoria.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -94,27 +96,21 @@ public class LivroService {
 
     @Transactional(readOnly = true)
     public List<LivroResponseDTO> listar(@Nullable String titulo, @Nullable String autor, @Nullable String categoria) {
-        List<Livro> livros;
+        List<Specification<Livro>> filtros = new ArrayList<>();
 
-        if (titulo != null && autor != null && categoria != null) {
-            livros = livroRepository.findByTituloContainingIgnoreCaseAndAutor_NomeContainingIgnoreCaseAndCategoria_NomeContainingIgnoreCase(titulo, autor, categoria);
-        } else if (autor != null && categoria != null) {
-            livros = livroRepository.findByAutor_NomeContainingIgnoreCaseAndCategoria_NomeContainingIgnoreCase(autor, categoria);
-        } else if (titulo != null && categoria != null) {
-            livros = livroRepository.findByTituloContainingIgnoreCaseAndCategoria_NomeContainingIgnoreCase(titulo, categoria);
-        } else if (titulo != null && autor != null) {
-            livros = livroRepository.findByTituloContainingIgnoreCaseAndAutor_NomeContainingIgnoreCase(titulo, autor);
-        } else if (categoria != null) {
-            livros = livroRepository.findByCategoria_NomeContainingIgnoreCase(categoria);
-        } else if (autor != null) {
-            livros = livroRepository.findByAutor_NomeContainingIgnoreCase(autor);
-        } else if (titulo != null) {
-            livros = livroRepository.findByTituloContainingIgnoreCase(titulo);
-        } else {
-            livros = livroRepository.findAll();
+        if (titulo != null) {
+            filtros.add(LivroSpecifications.tituloContem(titulo));
         }
 
-        return livros.stream()
+        if (autor != null) {
+            filtros.add(LivroSpecifications.autorContem(autor));
+        }
+
+        if (categoria != null) {
+            filtros.add(LivroSpecifications.categoriaContem(categoria));
+        }
+
+        return livroRepository.findAll(Specification.allOf(filtros)).stream()
                 .map(LivroResponseDTO::fromEntity)
                 .toList();
     }
