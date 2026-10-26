@@ -49,7 +49,7 @@ public class LivroControllerIntegrationTest {
     private UUID autorId;
     private UUID categoriaId;
 
-    private void salvarLivro(String titulo){
+    private void salvarLivro(String titulo) {
         Livro livro = new Livro();
         livro.setTitulo(titulo);
         livro.setAutor(autorRepository.getReferenceById(autorId));
@@ -59,7 +59,7 @@ public class LivroControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "OPERADOR")
-    void deveListarTodosOsLivrosQuandoNenhumFiltroForInformado() throws Exception{
+    void deveListarTodosOsLivrosQuandoNenhumFiltroForInformado() throws Exception {
         salvarLivro("1984");
         salvarLivro("Dom Casmurro");
 
@@ -70,7 +70,7 @@ public class LivroControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "OPERADOR")
-    void deveFiltrarPorTituloIgnorandoMaiusculas() throws Exception{
+    void deveFiltrarPorTituloIgnorandoMaiusculas() throws Exception {
         salvarLivro("1984");
         salvarLivro("Dom Casmurro");
 
@@ -82,7 +82,7 @@ public class LivroControllerIntegrationTest {
 
     @Test
     @WithMockUser(roles = "OPERADOR")
-    void deveCombinarFiltrosDeAutorECategoria() throws Exception{
+    void deveCombinarFiltrosDeAutorECategoria() throws Exception {
         salvarLivro("1984");
 
         mockMvc.perform(get("/livros").param("autor", "aut").param("categoria", "fic"))
@@ -94,6 +94,20 @@ public class LivroControllerIntegrationTest {
                 .andExpect(jsonPath("$.content.length()").value(0));
     }
 
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void devePaginarEOrdenarPorTitulo() throws Exception {
+        salvarLivro("C");
+        salvarLivro("A");
+        salvarLivro("B");
+
+        mockMvc.perform(get("/livros").param("size", "2").param("page", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].titulo").value("C"))
+                .andExpect(jsonPath("$.page.totalElements").value(3))
+                .andExpect(jsonPath("$.page.totalPages").value(2));
+    }
 
     @Test
     @WithMockUser(roles = "GERENTE")
