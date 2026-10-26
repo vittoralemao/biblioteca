@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.testcontainers.utility.TestcontainersConfiguration;
 
-@Import(TestcontainersConfiguration.class)
+@Import(TestContainerConfiguration.class)
 @SpringBootTest(properties = "jwt.secret=chave-somente-para-testes-com-pelo-menos-32-bytes")
 class BibliotecaApplicationTests {
 

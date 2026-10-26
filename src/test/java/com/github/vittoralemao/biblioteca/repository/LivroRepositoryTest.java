@@ -1,5 +1,6 @@
 package com.github.vittoralemao.biblioteca.repository;
 
+import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
 import com.github.vittoralemao.biblioteca.config.JpaAuditingConfig;
 import com.github.vittoralemao.biblioteca.modules.autor.Autor;
 import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-@Import({JpaAuditingConfig.class, TestcontainersConfiguration.class})
+@Import({JpaAuditingConfig.class, TestContainerConfiguration.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class LivroRepositoryTest {
 
