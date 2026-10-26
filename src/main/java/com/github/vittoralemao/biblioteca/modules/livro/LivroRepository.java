@@ -3,6 +3,8 @@ package com.github.vittoralemao.biblioteca.modules.livro;
 import com.github.vittoralemao.biblioteca.modules.autor.Autor;
 import com.github.vittoralemao.biblioteca.modules.categoria.Categoria;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +12,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecific
 
     @Override
     @EntityGraph(attributePaths = {"autor", "autor.nacionalidade", "categoria"})
-    List<Livro> findAll(Specification<Livro> spec);
+    Page<Livro> findAll(Specification<Livro> spec, Pageable pageable);
 
     boolean existsByAutor(Autor autor);
 

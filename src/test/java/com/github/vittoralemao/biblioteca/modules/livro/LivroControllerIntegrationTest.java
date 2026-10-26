@@ -65,7 +65,7 @@ public class LivroControllerIntegrationTest {
 
         mockMvc.perform(get("/livros"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.content.length()").value(2));
     }
 
     @Test
@@ -76,8 +76,8 @@ public class LivroControllerIntegrationTest {
 
         mockMvc.perform(get("/livros").param("titulo", "dom"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].titulo").value("Dom Casmurro"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].titulo").value("Dom Casmurro"));
     }
 
     @Test
@@ -87,11 +87,11 @@ public class LivroControllerIntegrationTest {
 
         mockMvc.perform(get("/livros").param("autor", "aut").param("categoria", "fic"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.content.length()").value(1));
 
         mockMvc.perform(get("/livros").param("autor", "aut").param("categoria", "xyz"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.content.length()").value(0));
     }
 
 

@@ -8,6 +8,8 @@ import com.github.vittoralemao.biblioteca.modules.categoria.CategoriaNaoEncontra
 import com.github.vittoralemao.biblioteca.modules.categoria.CategoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +97,7 @@ public class LivroService {
     }
 
     @Transactional(readOnly = true)
-    public List<LivroResponseDTO> listar(@Nullable String titulo, @Nullable String autor, @Nullable String categoria) {
+    public Page<LivroResponseDTO> listar(@Nullable String titulo, @Nullable String autor, @Nullable String categoria, Pageable pageable) {
         List<Specification<Livro>> filtros = new ArrayList<>();
 
         if (titulo != null) {
@@ -110,9 +112,8 @@ public class LivroService {
             filtros.add(LivroSpecifications.categoriaContem(categoria));
         }
 
-        return livroRepository.findAll(Specification.allOf(filtros)).stream()
-                .map(LivroResponseDTO::fromEntity)
-                .toList();
+        return livroRepository.findAll(Specification.allOf(filtros), pageable)
+                .map(LivroResponseDTO::fromEntity);
     }
 
     private Livro toEntity(LivroRequestDTO dto) {

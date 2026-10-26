@@ -2,6 +2,11 @@ spring:
   application:
     name: biblioteca
 
+  data:
+    web:
+      pageable:
+        max-page-size: 100
+
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:biblioteca_db}
     username: ${POSTGRES_USER:biblioteca}
