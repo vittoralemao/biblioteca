@@ -1,6 +1,5 @@
 package com.github.vittoralemao.biblioteca.modules.livro;
 
-
 import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
 import com.github.vittoralemao.biblioteca.modules.autor.Autor;
 import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;

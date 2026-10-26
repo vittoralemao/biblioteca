@@ -63,7 +63,7 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void deveSalvarEValidarLivroEAutorEmCascata(){
+    void naoDeveSalvarLivroComAutorNaoCadastrado(){
         Autor autorNaoSalvo = new Autor();
         autorNaoSalvo.setNome(AUTOR_TESTE);
         autorNaoSalvo.setNacionalidade(criaNacionalidadeTest());
