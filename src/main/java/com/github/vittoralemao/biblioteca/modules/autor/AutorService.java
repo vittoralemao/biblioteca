@@ -6,6 +6,8 @@ import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeNao
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,7 +79,7 @@ public class AutorService {
     }
 
     @Transactional(readOnly = true)
-    public List<AutorResponseDTO> listar(@Nullable String nome, @Nullable String nacionalidade) {
+    public Page<AutorResponseDTO> listar(@Nullable String nome, @Nullable String nacionalidade, Pageable pageable) {
         List<Specification<Autor>> filtros = new ArrayList<>();
 
         if (nome != null){
@@ -88,9 +90,8 @@ public class AutorService {
             filtros.add(AutorSpecifications.nacionalidadeContem(nacionalidade));
         }
 
-        return autorRepository.findAll(Specification.allOf(filtros)).stream()
-                .map(AutorResponseDTO::fromEntity)
-                .toList();
+        return autorRepository.findAll(Specification.allOf(filtros), pageable)
+                .map(AutorResponseDTO::fromEntity);
     }
 
     private Autor toEntity(AutorRequestDTO dto) {

@@ -54,7 +54,7 @@ public class AutorControllerIntegrationTest {
 
         mockMvc.perform(get("/autores"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.content.length()").value(2));
     }
 
     @Test
@@ -65,8 +65,8 @@ public class AutorControllerIntegrationTest {
 
         mockMvc.perform(get("/autores").param("nome", "mac"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].nome").value("Machado de Assis"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].nome").value("Machado de Assis"));
     }
 
     @Test
@@ -79,13 +79,13 @@ public class AutorControllerIntegrationTest {
                         .param("nome", "mac")
                         .param("nacionalidade", "bra"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath("$.content.length()").value(1));
 
         mockMvc.perform(get("/autores")
                         .param("nome", "mac")
                         .param("nacionalidade", "xyz"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath("$.content.length()").value(0));
 
     }
 
@@ -97,8 +97,8 @@ public class AutorControllerIntegrationTest {
 
         mockMvc.perform(get("/autores").param("nacionalidade", "ingl"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].nome").value("George Orwell"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].nome").value("George Orwell"));
     }
 
     @BeforeEach

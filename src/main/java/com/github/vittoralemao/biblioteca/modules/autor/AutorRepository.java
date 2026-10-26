@@ -1,6 +1,10 @@
 package com.github.vittoralemao.biblioteca.modules.autor;
 
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.Nacionalidade;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +18,10 @@ public interface AutorRepository extends JpaRepository<Autor, UUID>, JpaSpecific
 
     @Query("SELECT autor FROM Autor autor JOIN FETCH autor.livros WHERE autor.id = :id")
     Optional<Autor> buscarAutorComLivrosPorId(@Param("id") UUID id);
+
+    @Override
+    @EntityGraph(attributePaths = {"nacionalidade"})
+    Page<Autor> findAll(Specification<Autor> spec, Pageable pageable);
 
     boolean existsByNacionalidade(Nacionalidade nacionalidade);
     boolean existsByNomeAndDataNascimentoAndNacionalidade(String nome, LocalDate dataNascimento, Nacionalidade nacionalidade);
