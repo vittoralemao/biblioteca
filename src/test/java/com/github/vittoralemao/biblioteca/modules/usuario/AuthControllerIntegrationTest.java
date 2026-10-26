@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,7 +44,6 @@ public class AuthControllerIntegrationTest {
                                 "senha":"senhateste"
                                 }
                                 """))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty());
     }
@@ -60,7 +58,6 @@ public class AuthControllerIntegrationTest {
                                 "senha":"senhaerrada"
                                 }
                                 """))
-                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(jsonPath("$.message").value("Login ou senha inválidos."));
@@ -76,7 +73,6 @@ public class AuthControllerIntegrationTest {
                                 "senha":"senhateste"
                                 }
                                 """))
-                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(jsonPath("$.message").value("Login ou senha inválidos."));

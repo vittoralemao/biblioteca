@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = "jwt.secret=chave-somente-para-testes-com-pelo-menos-32-bytes")
@@ -28,7 +27,6 @@ public class CategoriaControllerIntegrationTest {
     @Test
     void deveRetornar401QuandoNaoAutenticado() throws Exception {
         mockMvc.perform(get("/categorias"))
-                .andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401));
     }
@@ -43,7 +41,6 @@ public class CategoriaControllerIntegrationTest {
                                 "nome":"POESIA"
                                 }
                                 """))
-                .andDo(print())
                 .andExpect(status().isForbidden());
     }
 
@@ -57,7 +54,6 @@ public class CategoriaControllerIntegrationTest {
                                 "nome":""
                                 }
                                 """))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors").isNotEmpty());
     }
@@ -72,7 +68,6 @@ public class CategoriaControllerIntegrationTest {
                                 "nome":"POESIA"
                                 }
                                 """))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.nome").value("POESIA"))

@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
@@ -35,6 +35,9 @@ public class LivroControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private LivroRepository livroRepository;
+
+    @Autowired
     private NacionalidadeRepository nacionalidadeRepository;
 
     @Autowired
@@ -45,6 +48,52 @@ public class LivroControllerIntegrationTest {
 
     private UUID autorId;
     private UUID categoriaId;
+
+    private void salvarLivro(String titulo){
+        Livro livro = new Livro();
+        livro.setTitulo(titulo);
+        livro.setAutor(autorRepository.getReferenceById(autorId));
+        livro.setCategoria(categoriaRepository.getReferenceById(categoriaId));
+        livroRepository.save(livro);
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveListarTodosOsLivrosQuandoNenhumFiltroForInformado() throws Exception{
+        salvarLivro("1984");
+        salvarLivro("Dom Casmurro");
+
+        mockMvc.perform(get("/livros"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveFiltrarPorTituloIgnorandoMaiusculas() throws Exception{
+        salvarLivro("1984");
+        salvarLivro("Dom Casmurro");
+
+        mockMvc.perform(get("/livros").param("titulo", "dom"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].titulo").value("Dom Casmurro"));
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveCombinarFiltrosDeAutorECategoria() throws Exception{
+        salvarLivro("1984");
+
+        mockMvc.perform(get("/livros").param("autor", "aut").param("categoria", "fic"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+
+        mockMvc.perform(get("/livros").param("autor", "aut").param("categoria", "xyz"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
 
     @Test
     @WithMockUser(roles = "GERENTE")
@@ -60,7 +109,6 @@ public class LivroControllerIntegrationTest {
                                 "anoPublicacao": 1949
                                 }
                                 """.formatted(autorId, categoriaId)))
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.titulo").value("1984"))
@@ -81,7 +129,6 @@ public class LivroControllerIntegrationTest {
                                 "anoPublicacao": 1949
                                 }
                                 """.formatted(UUID.randomUUID(), categoriaId)))
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404));
     }
@@ -107,7 +154,6 @@ public class LivroControllerIntegrationTest {
         mockMvc.perform(post("/livros")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(livroJson))
-                .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.status").value(409));
     }
@@ -125,7 +171,6 @@ public class LivroControllerIntegrationTest {
                                 "anoPublicacao": 1949
                                 }
                                 """.formatted(categoriaId)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.errors").isNotEmpty());
