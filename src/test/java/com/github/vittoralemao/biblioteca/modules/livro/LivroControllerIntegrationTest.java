@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = "jwt.secret=chave-somente-para-testes-com-pelo-menos-32-bytes")
@@ -107,6 +108,14 @@ public class LivroControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[0].titulo").value("C"))
                 .andExpect(jsonPath("$.page.totalElements").value(3))
                 .andExpect(jsonPath("$.page.totalPages").value(2));
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar400QuandoOCampoDeOrdenacaoNaoExiste() throws Exception{
+        mockMvc.perform(get("/livros").param("sort", "campoQueNaoExiste"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
     }
 
     @Test

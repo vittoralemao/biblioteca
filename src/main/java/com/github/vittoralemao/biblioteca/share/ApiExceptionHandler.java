@@ -2,6 +2,7 @@ package com.github.vittoralemao.biblioteca.share;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -102,6 +103,18 @@ public class ApiExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErroResponseDTO> trataCampoDeOrdenacaoInvalido(PropertyReferenceException ex){
+
+        ErroResponseDTO erro = new ErroResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                "Campo de ordenação inválido: " + ex.getPropertyName(),
+                List.of()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
 
 
