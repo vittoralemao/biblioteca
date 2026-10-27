@@ -3,10 +3,11 @@ package com.github.vittoralemao.biblioteca.modules.categoria;
 import com.github.vittoralemao.biblioteca.modules.livro.LivroRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -59,18 +60,12 @@ public class CategoriaService {
     }
 
     @Transactional(readOnly = true)
-    public List<CategoriaResponseDTO> listar(@Nullable String nome){
-        List<Categoria> categorias;
+    public Page<CategoriaResponseDTO> listar(@Nullable String nome, Pageable pageable) {
+        Page<Categoria> categorias = (nome != null)
+                ? categoriaRepository.findByNomeContainingIgnoreCase(nome, pageable)
+                : categoriaRepository.findAll(pageable);
 
-        if (nome != null) {
-            categorias = categoriaRepository.findByNomeContainingIgnoreCase(nome);
-        } else {
-            categorias = categoriaRepository.findAll();
-        }
-
-        return categorias.stream()
-                .map(CategoriaResponseDTO::fromEntity)
-                .toList();
+        return categorias.map(CategoriaResponseDTO::fromEntity);
     }
 
     @Transactional

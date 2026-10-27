@@ -8,13 +8,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Categorias", description = "Gerenciamento de categorias")
@@ -59,12 +62,13 @@ public class CategoriaController {
 
     @ApiResponse(responseCode = "200", description = "Lista de categorias retornada com sucesso")
     @GetMapping
-    public ResponseEntity<List<CategoriaResponseDTO>> listar(
-            @RequestParam(required = false) String nome
-    ){
-        List<CategoriaResponseDTO> categorias = categoriaService.listar(nome);
+    public ResponseEntity<PagedModel<CategoriaResponseDTO>> listar(
+            @RequestParam(required = false) String nome,
+            @PageableDefault(size = 20, sort = "nome") Pageable pageable
+    ) {
+        Page<CategoriaResponseDTO> categorias = categoriaService.listar(nome, pageable);
 
-        return ResponseEntity.ok(categorias);
+        return ResponseEntity.ok(new PagedModel<>(categorias));
     }
 
     @PreAuthorize("hasRole('GERENTE')")
