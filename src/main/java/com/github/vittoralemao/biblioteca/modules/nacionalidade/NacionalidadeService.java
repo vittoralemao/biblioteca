@@ -3,9 +3,13 @@ package com.github.vittoralemao.biblioteca.modules.nacionalidade;
 import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,21 +69,19 @@ public class NacionalidadeService {
     }
 
     @Transactional(readOnly = true)
-    public List<NacionalidadeResponseDTO> listar(@Nullable String nome, @Nullable String iso) {
-
-        List<Nacionalidade> nacionalidades;
+    public Page<NacionalidadeResponseDTO> listar(@Nullable String nome, @Nullable String iso, Pageable pageable) {
+        List<Specification<Nacionalidade>> filtros = new ArrayList<>();
 
         if (nome != null) {
-            nacionalidades = nacionalidadeRepository.findByNomeContainingIgnoreCase(nome);
-        } else if (iso != null){
-            nacionalidades = nacionalidadeRepository.findByIsoContainingIgnoreCase(iso);
-        } else {
-            nacionalidades = nacionalidadeRepository.findAll();
+            filtros.add(NacionalidadeSpecifications.nomeContem(nome));
         }
 
-        return nacionalidades.stream()
-                .map(NacionalidadeResponseDTO::fromEntity)
-                .toList();
+        if (iso != null) {
+            filtros.add(NacionalidadeSpecifications.isoContem(iso));
+        }
+
+        return nacionalidadeRepository.findAll(Specification.allOf(filtros), pageable)
+                .map(NacionalidadeResponseDTO::fromEntity);
     }
 
     @Transactional

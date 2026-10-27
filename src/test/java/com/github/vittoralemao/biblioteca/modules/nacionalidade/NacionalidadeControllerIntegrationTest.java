@@ -41,7 +41,7 @@ public class NacionalidadeControllerIntegrationTest {
 
         mockMvc.perform(get("/nacionalidades"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.content.length()").value(2));
     }
 
     @Test
@@ -52,8 +52,8 @@ public class NacionalidadeControllerIntegrationTest {
 
         mockMvc.perform(get("/nacionalidades").param("nome", "iNgLe"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].nome").value("INGLESA"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].nome").value("INGLESA"));
     }
 
     @Test
@@ -64,7 +64,22 @@ public class NacionalidadeControllerIntegrationTest {
 
         mockMvc.perform(get("/nacionalidades").param("iso", "gb"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].iso").value("GBR"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].iso").value("GBR"));
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveCombinarFiltrosDeNomeEIso() throws Exception {
+        salvarNacionalidade("BRASILEIRA", "BRA");
+        salvarNacionalidade("INGLESA", "GBR");
+
+        mockMvc.perform(get("/nacionalidades").param("nome", "ingl").param("iso", "gbr"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1));
+
+        mockMvc.perform(get("/nacionalidades").param("nome", "ingl").param("iso", "bra"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(0));
     }
 }
