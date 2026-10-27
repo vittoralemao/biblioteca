@@ -127,7 +127,7 @@ public class NacionalidadeServiceTest {
         assertThatThrownBy(() -> nacionalidadeService.excluir(id))
                 .isInstanceOf(NacionalidadeComAutorVinculadoException.class);
 
-        verify(nacionalidadeRepository, never()).delete(any());
+        verify(nacionalidadeRepository, never()).delete(any(Nacionalidade.class));
 
     }
 

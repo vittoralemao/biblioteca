@@ -24,6 +24,38 @@ public class CategoriaControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    private void salvarCategoria(String nome) {
+        Categoria categoria = new Categoria();
+        categoria.setNome(nome);
+        categoriaRepository.save(categoria);
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveListarTodasAsCategoriasQuandoNenhumFiltroForInformado() throws Exception {
+        salvarCategoria("FICCAO");
+        salvarCategoria("POESIA");
+
+        mockMvc.perform(get("/categorias"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveFiltrarPorNomeIgnorandoMaiusculas() throws Exception {
+        salvarCategoria("FICCAO");
+        salvarCategoria("POESIA");
+
+        mockMvc.perform(get("/categorias").param("nome", "pOeS"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].nome").value("POESIA"));
+    }
+
     @Test
     void deveRetornar401QuandoNaoAutenticado() throws Exception {
         mockMvc.perform(get("/categorias"))

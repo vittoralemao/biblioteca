@@ -100,7 +100,7 @@ public class CategoriaServiceTest {
         assertThatThrownBy(() -> categoriaService.excluir(id))
                 .isInstanceOf(CategoriaComLivroVinculadoException.class);
 
-        verify(categoriaRepository, never()).delete(any());
+        verify(categoriaRepository, never()).delete(any(Categoria.class));
 
     }
 }
