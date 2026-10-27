@@ -23,7 +23,6 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(properties = "jwt.secret=chave-somente-para-testes-com-pelo-menos-32-bytes")
@@ -116,6 +115,25 @@ public class LivroControllerIntegrationTest {
         mockMvc.perform(get("/livros").param("sort", "campoQueNaoExiste"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400));
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar400QuandoOIsbnEInvalido() throws Exception {
+        mockMvc.perform(post("/livros")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                                {
+                                "titulo": "1984",
+                                "autorId": "%s",
+                                "categoriaId": "%s",
+                                "isbn": "978-85-359-1484-0",
+                                "anoPublicacao": 1949
+                                }
+                                """.formatted(autorId, categoriaId)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.errors").isNotEmpty());;
     }
 
     @Test

@@ -1,10 +1,12 @@
 package com.github.vittoralemao.biblioteca.modules.livro;
 
+import com.github.vittoralemao.biblioteca.share.validacao.ISBN;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public record LivroRequestDTO(
@@ -19,10 +21,17 @@ public record LivroRequestDTO(
         UUID categoriaId,
 
         @Nullable
-        @Size(max = 20, message = "O isbn deve ter no máximo 20 caracteres")
+        @ISBN
         String isbn,
 
         @Nullable
         Integer anoPublicacao
 ) {
+    public LivroRequestDTO {
+        if (isbn != null) {
+            isbn = isbn.replace("-", "")
+                    .replace(" ", "")
+                    .toUpperCase(Locale.ROOT);
+        }
+    }
 }
