@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -55,6 +56,33 @@ public class LivroControllerIntegrationTest {
         livro.setAutor(autorRepository.getReferenceById(autorId));
         livro.setCategoria(categoriaRepository.getReferenceById(categoriaId));
         livroRepository.save(livro);
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveRetornarProblemDetailsQuandoOLivroNaoExiste() throws Exception {
+        UUID idInexistente = UUID.randomUUID();
+
+        mockMvc.perform(get("/livros/" + idInexistente))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith("application/problem+json"))
+                .andExpect(jsonPath("$.type")
+                        .value("https://biblioteca.vitoralemao.com.br/problemas/recurso-nao-encontrado"))
+                .andExpect(jsonPath("$.title").value("Recurso não encontrado"))
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.detail").value(containsString(idInexistente.toString())))
+                .andExpect(jsonPath("$.instance").value("/livros/" + idInexistente));
+    }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveRetornarProblemDetailsQuandoARotaNaoExiste() throws Exception {
+        mockMvc.perform(get("/livro"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith("application/problem+json"))
+                .andExpect(jsonPath("$.type")
+                        .value("https://biblioteca.vitoralemao.com.br/problemas/recurso-nao-encontrado"))
+                .andExpect(jsonPath("$.detail").value("Rota não encontrada: /livro"));
     }
 
     @Test
@@ -133,7 +161,7 @@ public class LivroControllerIntegrationTest {
                                 """.formatted(autorId, categoriaId)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.errors").isNotEmpty());;
+                .andExpect(jsonPath("$.errors").isNotEmpty());
     }
 
     @Test

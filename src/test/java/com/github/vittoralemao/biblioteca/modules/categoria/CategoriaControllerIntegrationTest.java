@@ -60,7 +60,10 @@ public class CategoriaControllerIntegrationTest {
     void deveRetornar401QuandoNaoAutenticado() throws Exception {
         mockMvc.perform(get("/categorias"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.status").value(401));
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(content().contentTypeCompatibleWith("application/problem+json"))
+                .andExpect(jsonPath("$.type").value("https://biblioteca.vitoralemao.com.br/problemas/autenticacao-necessaria"))
+                .andExpect(jsonPath("$.instance").value("/categorias"));
     }
 
     @Test

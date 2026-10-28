@@ -60,7 +60,7 @@ public class AuthControllerIntegrationTest {
                                 """))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
-                .andExpect(jsonPath("$.message").value("Login ou senha inválidos."));
+                .andExpect(jsonPath("$.detail").value("Login ou senha inválidos."));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class AuthControllerIntegrationTest {
                                 """))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
-                .andExpect(jsonPath("$.message").value("Login ou senha inválidos."));
+                .andExpect(jsonPath("$.detail").value("Login ou senha inválidos."));
     }
 
     @Test
