@@ -7,6 +7,7 @@ import java.net.URI;
 
 public enum TipoProblema {
 
+    ERRO_INTERNO("erro-interno", "Erro interno", HttpStatus.INTERNAL_SERVER_ERROR),
     RECURSO_NAO_ENCONTRADO("recurso-nao-encontrado", "Recurso não encontrado", HttpStatus.NOT_FOUND),
     RECURSO_DUPLICADO("recurso-duplicado", "Recurso duplicado", HttpStatus.CONFLICT),
     RECURSO_EM_USO("recurso-em-uso", "Recurso em uso", HttpStatus.CONFLICT),

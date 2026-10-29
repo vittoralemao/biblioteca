@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
 
@@ -53,6 +54,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return TipoProblema.ORDENACAO_INVALIDA.criar("Campo de ordenação inválido: " + ex.getPropertyName());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail trataErroInesperado(Exception ex) {
+        log.error("Erro inesperado", ex);
+        return TipoProblema.ERRO_INTERNO.criar("Ocorreu um erro inesperado. Tente novamente mais tarde.");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ProblemDetail trataAcessoNegado(AccessDeniedException ex){
+        log.debug("Acesso negado: {}", ex.getMessage());
+        return TipoProblema.ACESSO_NEGADO.criar("Você não tem permissão para acessar este recurso.");
+    }
+
     @Override
     protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -84,4 +97,5 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problema = TipoProblema.RECURSO_NAO_ENCONTRADO.criar("Rota não encontrada: /" + ex.getResourcePath());
         return ResponseEntity.status(problema.getStatus()).body(problema);
     }
+
 }
