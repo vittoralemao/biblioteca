@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -66,7 +67,7 @@ public class LivroController {
             @RequestParam(required = false) String titulo,
             @RequestParam(required = false) String autor,
             @RequestParam(required = false) String categoria,
-            @PageableDefault(size = 20, sort = "titulo") Pageable pageable
+            @ParameterObject @PageableDefault(size = 20, sort = "titulo") Pageable pageable
             ) {
         Page<LivroResponseDTO> livros = livroService.listar(titulo, autor, categoria, pageable);
         return ResponseEntity.ok(new PagedModel<>(livros));

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -65,7 +66,7 @@ public class NacionalidadeController {
     public ResponseEntity<PagedModel<NacionalidadeResponseDTO>> listar(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) String iso,
-            @PageableDefault(size = 20, sort = "nome") Pageable pageable
+            @ParameterObject @PageableDefault(size = 20, sort = "nome") Pageable pageable
     ) {
 
         Page<NacionalidadeResponseDTO> nacionalidades = nacionalidadeService.listar(nome, iso, pageable);
