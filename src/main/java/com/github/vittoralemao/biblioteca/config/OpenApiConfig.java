@@ -7,19 +7,25 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.info.BuildProperties;
 
 @Configuration
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI bibliotecaOpenAPI(){
+    public OpenAPI bibliotecaOpenAPI(ObjectProvider<BuildProperties> buildProperties){
         String securitySchemeName = "bearerAuth";
+
+        String versao = buildProperties.getIfAvailable() != null
+                ? buildProperties.getIfAvailable().getVersion()
+                : "dev";
 
         return new OpenAPI()
                 .info(new Info()
                         .title("Biblioteca API")
                         .description("API REST para gerenciamento de um acervo de livros, autores, categorias e nacionalidades")
-                        .version("1.0.0"))
+                        .version(versao))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()
