@@ -35,5 +35,5 @@ jwt:
 
 app:
   admin:
-    email: ${ADMIN_EMAIL:admin@admin.com}
-    senha: ${ADMIN_SENHA:admin}
+    email: ${ADMIN_EMAIL}
+    senha: ${ADMIN_SENHA}
