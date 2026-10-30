@@ -1,0 +1,7 @@
+jwt:
+  secret: chave-somente-para-testes-com-pelo-menos-32-bytes
+
+app:
+  admin:
+    email: admin@teste.com
+    senha: senha-de-teste
