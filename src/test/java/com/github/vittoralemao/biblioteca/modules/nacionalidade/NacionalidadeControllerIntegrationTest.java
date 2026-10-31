@@ -1,6 +1,7 @@
 package com.github.vittoralemao.biblioteca.modules.nacionalidade;
 
 import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
+import com.github.vittoralemao.biblioteca.config.ApiVersionConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class NacionalidadeControllerIntegrationTest {
 
+    private static final String URL = ApiVersionConfig.PREFIXO_V1 + "/nacionalidades";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -41,7 +44,7 @@ public class NacionalidadeControllerIntegrationTest {
         salvarNacionalidade("BRASILEIRA", "BRA");
         salvarNacionalidade("INGLESA", "GBR");
 
-        mockMvc.perform(get("/nacionalidades"))
+        mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2));
     }
@@ -52,7 +55,7 @@ public class NacionalidadeControllerIntegrationTest {
         salvarNacionalidade("BRASILEIRA", "BRA");
         salvarNacionalidade("INGLESA", "GBR");
 
-        mockMvc.perform(get("/nacionalidades").param("nome", "iNgLe"))
+        mockMvc.perform(get(URL).param("nome", "iNgLe"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].nome").value("INGLESA"));
@@ -64,7 +67,7 @@ public class NacionalidadeControllerIntegrationTest {
         salvarNacionalidade("BRASILEIRA", "BRA");
         salvarNacionalidade("INGLESA", "GBR");
 
-        mockMvc.perform(get("/nacionalidades").param("iso", "gb"))
+        mockMvc.perform(get(URL).param("iso", "gb"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].iso").value("GBR"));
@@ -76,11 +79,11 @@ public class NacionalidadeControllerIntegrationTest {
         salvarNacionalidade("BRASILEIRA", "BRA");
         salvarNacionalidade("INGLESA", "GBR");
 
-        mockMvc.perform(get("/nacionalidades").param("nome", "ingl").param("iso", "gbr"))
+        mockMvc.perform(get(URL).param("nome", "ingl").param("iso", "gbr"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
 
-        mockMvc.perform(get("/nacionalidades").param("nome", "ingl").param("iso", "bra"))
+        mockMvc.perform(get(URL).param("nome", "ingl").param("iso", "bra"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(0));
     }

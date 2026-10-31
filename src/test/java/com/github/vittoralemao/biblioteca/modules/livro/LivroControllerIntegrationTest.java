@@ -1,6 +1,7 @@
 package com.github.vittoralemao.biblioteca.modules.livro;
 
 import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
+import com.github.vittoralemao.biblioteca.config.ApiVersionConfig;
 import com.github.vittoralemao.biblioteca.modules.autor.Autor;
 import com.github.vittoralemao.biblioteca.modules.autor.AutorRepository;
 import com.github.vittoralemao.biblioteca.modules.categoria.Categoria;
@@ -34,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class LivroControllerIntegrationTest {
 
+    private static final String URL = ApiVersionConfig.PREFIXO_V1 + "/livros";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -65,7 +68,7 @@ public class LivroControllerIntegrationTest {
     void deveRetornarProblemDetailsQuandoOLivroNaoExiste() throws Exception {
         UUID idInexistente = UUID.randomUUID();
 
-        mockMvc.perform(get("/livros/" + idInexistente))
+        mockMvc.perform(get(URL + "/" + idInexistente))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentTypeCompatibleWith("application/problem+json"))
                 .andExpect(jsonPath("$.type")
@@ -73,7 +76,7 @@ public class LivroControllerIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Recurso não encontrado"))
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.detail").value(containsString(idInexistente.toString())))
-                .andExpect(jsonPath("$.instance").value("/livros/" + idInexistente));
+                .andExpect(jsonPath("$.instance").value(URL + "/" + idInexistente));
     }
 
     @Test
@@ -93,7 +96,7 @@ public class LivroControllerIntegrationTest {
         salvarLivro("1984");
         salvarLivro("Dom Casmurro");
 
-        mockMvc.perform(get("/livros"))
+        mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2));
     }
@@ -104,7 +107,7 @@ public class LivroControllerIntegrationTest {
         salvarLivro("1984");
         salvarLivro("Dom Casmurro");
 
-        mockMvc.perform(get("/livros").param("titulo", "dom"))
+        mockMvc.perform(get(URL).param("titulo", "dom"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].titulo").value("Dom Casmurro"));
@@ -115,11 +118,11 @@ public class LivroControllerIntegrationTest {
     void deveCombinarFiltrosDeAutorECategoria() throws Exception {
         salvarLivro("1984");
 
-        mockMvc.perform(get("/livros").param("autor", "aut").param("categoria", "fic"))
+        mockMvc.perform(get(URL).param("autor", "aut").param("categoria", "fic"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
 
-        mockMvc.perform(get("/livros").param("autor", "aut").param("categoria", "xyz"))
+        mockMvc.perform(get(URL).param("autor", "aut").param("categoria", "xyz"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(0));
     }
@@ -131,7 +134,7 @@ public class LivroControllerIntegrationTest {
         salvarLivro("A");
         salvarLivro("B");
 
-        mockMvc.perform(get("/livros").param("size", "2").param("page", "1"))
+        mockMvc.perform(get(URL).param("size", "2").param("page", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].titulo").value("C"))
@@ -142,7 +145,7 @@ public class LivroControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveRetornar400QuandoOCampoDeOrdenacaoNaoExiste() throws Exception{
-        mockMvc.perform(get("/livros").param("sort", "campoQueNaoExiste"))
+        mockMvc.perform(get(URL).param("sort", "campoQueNaoExiste"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400));
     }
@@ -150,7 +153,7 @@ public class LivroControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveRetornar400QuandoOIsbnEInvalido() throws Exception {
-        mockMvc.perform(post("/livros")
+        mockMvc.perform(post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                                 {
@@ -169,7 +172,7 @@ public class LivroControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveCadastrarLivroERetornar201() throws Exception {
-        mockMvc.perform(post("/livros")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -189,7 +192,7 @@ public class LivroControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveRetornar404QuandoOAutorNaoExiste() throws Exception {
-        mockMvc.perform(post("/livros")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -218,11 +221,11 @@ public class LivroControllerIntegrationTest {
                 }
                 """.formatted(autorId, categoriaId);
 
-        mockMvc.perform(post("/livros")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(livroJson))
                 .andExpect(status().isCreated());
-        mockMvc.perform(post("/livros")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(livroJson))
                 .andExpect(status().isConflict())
@@ -232,7 +235,7 @@ public class LivroControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveRetornar400QuandoOAutorNaoEInformado() throws Exception {
-        mockMvc.perform(post("/livros")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {

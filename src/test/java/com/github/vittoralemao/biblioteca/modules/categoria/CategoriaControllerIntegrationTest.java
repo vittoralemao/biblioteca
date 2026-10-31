@@ -1,6 +1,7 @@
 package com.github.vittoralemao.biblioteca.modules.categoria;
 
 import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
+import com.github.vittoralemao.biblioteca.config.ApiVersionConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class CategoriaControllerIntegrationTest {
 
+    private static final String URL = ApiVersionConfig.PREFIXO_V1 + "/categorias";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -41,7 +44,7 @@ public class CategoriaControllerIntegrationTest {
         salvarCategoria("FICCAO");
         salvarCategoria("POESIA");
 
-        mockMvc.perform(get("/categorias"))
+        mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2));
     }
@@ -52,7 +55,7 @@ public class CategoriaControllerIntegrationTest {
         salvarCategoria("FICCAO");
         salvarCategoria("POESIA");
 
-        mockMvc.perform(get("/categorias").param("nome", "pOeS"))
+        mockMvc.perform(get(URL).param("nome", "pOeS"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].nome").value("POESIA"));
@@ -60,18 +63,18 @@ public class CategoriaControllerIntegrationTest {
 
     @Test
     void deveRetornar401QuandoNaoAutenticado() throws Exception {
-        mockMvc.perform(get("/categorias"))
+        mockMvc.perform(get(URL))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.status").value(401))
                 .andExpect(content().contentTypeCompatibleWith("application/problem+json"))
                 .andExpect(jsonPath("$.type").value("https://biblioteca.vitoralemao.com.br/problemas/autenticacao-necessaria"))
-                .andExpect(jsonPath("$.instance").value("/categorias"));
+                .andExpect(jsonPath("$.instance").value(URL));
     }
 
     @Test
     @WithMockUser(roles = "OPERADOR")
     void deveRetornar403QuandoOperadorTentaCadastrar() throws Exception {
-        mockMvc.perform(post("/categorias")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -84,7 +87,7 @@ public class CategoriaControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveRetornar400QuandoONomeEstaVazio() throws Exception {
-        mockMvc.perform(post("/categorias")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -98,7 +101,7 @@ public class CategoriaControllerIntegrationTest {
     @Test
     @WithMockUser(roles = "GERENTE")
     void deveCadastrarCategoriaERetornar201() throws Exception {
-        mockMvc.perform(post("/categorias")
+        mockMvc.perform(post(URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
