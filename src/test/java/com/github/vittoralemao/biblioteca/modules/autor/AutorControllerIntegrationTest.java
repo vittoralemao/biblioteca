@@ -1,6 +1,7 @@
 package com.github.vittoralemao.biblioteca.modules.autor;
 
 import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
+import com.github.vittoralemao.biblioteca.config.ApiVersionConfig;
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.Nacionalidade;
 import com.github.vittoralemao.biblioteca.modules.nacionalidade.NacionalidadeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class AutorControllerIntegrationTest {
 
+    private static final String URL = ApiVersionConfig.PREFIXO_V1 + "/autores";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -54,7 +57,7 @@ public class AutorControllerIntegrationTest {
         salvarAutor("Machado de Assis", brasileiraId);
         salvarAutor("George Orwell", inglesaId);
 
-        mockMvc.perform(get("/autores"))
+        mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(2));
     }
@@ -65,7 +68,7 @@ public class AutorControllerIntegrationTest {
         salvarAutor("Machado de Assis", brasileiraId);
         salvarAutor("George Orwell", inglesaId);
 
-        mockMvc.perform(get("/autores").param("nome", "mac"))
+        mockMvc.perform(get(URL).param("nome", "mac"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].nome").value("Machado de Assis"));
@@ -77,13 +80,13 @@ public class AutorControllerIntegrationTest {
         salvarAutor("Machado de Assis", brasileiraId);
         salvarAutor("George Orwell", inglesaId);
 
-        mockMvc.perform(get("/autores")
+        mockMvc.perform(get(URL)
                         .param("nome", "mac")
                         .param("nacionalidade", "bra"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1));
 
-        mockMvc.perform(get("/autores")
+        mockMvc.perform(get(URL)
                         .param("nome", "mac")
                         .param("nacionalidade", "xyz"))
                 .andExpect(status().isOk())
@@ -97,7 +100,7 @@ public class AutorControllerIntegrationTest {
         salvarAutor("Machado de Assis", brasileiraId);
         salvarAutor("George Orwell", inglesaId);
 
-        mockMvc.perform(get("/autores").param("nacionalidade", "ingl"))
+        mockMvc.perform(get(URL).param("nacionalidade", "ingl"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].nome").value("George Orwell"));
