@@ -78,7 +78,7 @@ POSTGRES_PASSWORD=sua_senha
 POSTGRES_DB=nome_do_banco
 JWT_SECRET=chave_secreta_com_pelo_menos_32_caracteres
 ```
-> Opcionais: `O perfil `dev` fornece credenciais padrão do admin (`admin@admin.com` / `admin`) para uso local. Sem ele, a aplicação exige `ADMIN_EMAIL` e `ADMIN_SENHA`, como em produção.`
+> O perfil `dev` fornece credenciais padrão do admin (`admin@admin.com` / `admin`) para uso local. Sem ele, a aplicação exige `ADMIN_EMAIL` e `ADMIN_SENHA`, como em produção. Opcional: `JPA_SHOW_SQL=true` exibe o SQL no console.
 
 5. Rode a aplicação e acesse o Swagger em `http://localhost:8080/swagger-ui/index.html`.
 
