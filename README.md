@@ -7,7 +7,7 @@ API REST para gerenciamento de um acervo de livros, autores, categorias e nacion
 ## 🔎 Teste a API
 
 1. Acesse https://biblioteca.vitoralemao.com.br (abre a documentação Swagger)
-2. Faça `POST /login` com o usuário de demonstração:
+2. Faça `POST /v1/login` com o usuário de demonstração:
 ```
 login: demo@vitoralemao.com.br
 senha: demo
@@ -32,6 +32,7 @@ Java 26 · Spring Boot 4.1.1 · Spring Data JPA / Hibernate · Spring Security (
 - **Documentação interativa** com Swagger/OpenAPI, incluindo autenticação pelo botão "Authorize"
 - **Docker:** Docker Compose para o ambiente local e Dockerfile multi-stage
 - **Testes de integração** da camada de persistência com `@DataJpaTest`
+- **Versionamento:** rotas sob o prefixo `/v1` e política de versionamento documentada em [`docs/versionamento.md`](docs/versionamento.md)
 
 ## ☁️ Deploy na AWS
 
@@ -71,12 +72,13 @@ docker compose up -d
 
 4. Defina as variáveis de ambiente da aplicação na sua IDE (o Spring Boot não lê o `.env`):
 ```
+SPRING_PROFILES_ACTIVE=dev
 POSTGRES_USER=seu_usuario
 POSTGRES_PASSWORD=sua_senha
 POSTGRES_DB=nome_do_banco
 JWT_SECRET=chave_secreta_com_pelo_menos_32_caracteres
 ```
-> Opcionais: `ADMIN_EMAIL` e `ADMIN_SENHA` (credenciais do admin inicial) e `JPA_SHOW_SQL=true` (exibe o SQL no console).
+> Opcionais: `O perfil `dev` fornece credenciais padrão do admin (`admin@admin.com` / `admin`) para uso local. Sem ele, a aplicação exige `ADMIN_EMAIL` e `ADMIN_SENHA`, como em produção.`
 
 5. Rode a aplicação e acesse o Swagger em `http://localhost:8080/swagger-ui/index.html`.
 
@@ -91,7 +93,7 @@ senha: admin
 
 > ⚠️ Credenciais padrão apenas para uso local. Em produção, são definidas pelas variáveis `ADMIN_EMAIL` e `ADMIN_SENHA`.
 
-Faça `POST /login` com essas credenciais, copie o token e use-o no botão **Authorize** do Swagger.
+Faça `POST /v1/login` com essas credenciais, copie o token e use-o no botão **Authorize** do Swagger.
 
 ## 🔜 Próximos passos
 
