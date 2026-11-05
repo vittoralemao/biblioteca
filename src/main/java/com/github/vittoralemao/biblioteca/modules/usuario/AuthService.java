@@ -1,26 +1,40 @@
 package com.github.vittoralemao.biblioteca.modules.usuario;
-
 import com.github.vittoralemao.biblioteca.share.CredenciaisInvalidasException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+
 @Service
-@RequiredArgsConstructor
 public class AuthService {
+
+    private static final String SENHA_FICTICIA = "senha-ficticia-para-equalizar-tempo";
+
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final String hashFicticio;
+
+    public AuthService(UsuarioRepository usuarioRepository,
+                       PasswordEncoder passwordEncoder,
+                       JwtService jwtService) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.hashFicticio = passwordEncoder.encode(SENHA_FICTICIA);
+    }
 
     public LoginResponseDTO login(LoginRequestDTO request){
-        Usuario usuario = usuarioRepository.findByLogin(request.login()).
-                orElseThrow(CredenciaisInvalidasException::new);
+        Optional<Usuario> usuario = usuarioRepository.findByLogin(request.login());
+        String hash = usuario.map(Usuario::getSenha).orElse(hashFicticio);
 
-        if(!passwordEncoder.matches(request.senha(), usuario.getSenha())) {
+        boolean senhaConfere = passwordEncoder.matches(request.senha(), hash);
+        if (usuario.isEmpty() || !senhaConfere) {
             throw new CredenciaisInvalidasException();
         }
 
-        String token = jwtService.gerarToken(usuario);
-        return new LoginResponseDTO(token);
+        return new LoginResponseDTO(jwtService.gerarToken(usuario.get()));
     }
+
 }
