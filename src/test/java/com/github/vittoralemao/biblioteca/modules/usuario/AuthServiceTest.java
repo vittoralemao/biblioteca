@@ -12,8 +12,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -54,7 +53,8 @@ public class AuthServiceTest {
         assertThatThrownBy(() -> authService.login(dto))
                 .isInstanceOf(CredenciaisInvalidasException.class);
 
-        verifyNoInteractions(passwordEncoder, jwtService);
+        verify(passwordEncoder).matches(eq("demo"), any());
+        verifyNoInteractions(jwtService);
     }
 
     @Test
