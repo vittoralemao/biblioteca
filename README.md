@@ -19,7 +19,7 @@ senha: demo
 
 ## 🚀 Tecnologias
 
-Java 26 · Spring Boot 4.1.1 · Spring Data JPA / Hibernate · Spring Security (JWT) · Bean Validation · springdoc-openapi (Swagger) · PostgreSQL 18 · Docker / Docker Compose · Maven · Lombok · JUnit 5 / AssertJ · AWS (EC2, RDS) · Caddy
+Java 25 · Spring Boot 4.1.1 · Spring Data JPA / Hibernate · Spring Security (JWT) · Bean Validation · springdoc-openapi (Swagger) · PostgreSQL 18 · Docker / Docker Compose · Maven · Lombok · JUnit 5 / AssertJ · AWS (EC2, RDS) · Caddy
 
 ## ✅ Funcionalidades
 
@@ -49,7 +49,7 @@ Internet ──HTTPS──▶ Caddy ──▶ API (Docker) ──▶ PostgreSQL 
 
 ## ⚙️ Como rodar localmente
 
-**Pré-requisitos:** Docker, Docker Compose e JDK 26.
+**Pré-requisitos:** Docker, Docker Compose e JDK 25.
 
 1. Clone o repositório:
 ```bash

@@ -1,4 +1,9 @@
 # Perfil de desenvolvimento local.
+spring:
+  datasource:
+    username: ${POSTGRES_USER:biblioteca}
+    password: ${POSTGRES_PASSWORD:biblioteca}
+
 app:
   admin:
     email: ${ADMIN_EMAIL:admin@admin.com}
