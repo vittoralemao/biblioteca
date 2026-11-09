@@ -1,8 +1,7 @@
 package com.github.vittoralemao.biblioteca.modules.nacionalidade;
 
+import com.github.vittoralemao.biblioteca.share.BuscaTexto;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.util.Locale;
 
 public final class NacionalidadeSpecifications {
 
@@ -11,11 +10,11 @@ public final class NacionalidadeSpecifications {
 
     public static Specification<Nacionalidade> nomeContem(String nome) {
         return (root, query, cb) ->
-                cb.like(cb.lower(root.get("nome")), "%" + nome.toLowerCase(Locale.ROOT) + "%");
+                cb.like(cb.lower(root.get("nome")), BuscaTexto.contem(nome), BuscaTexto.ESCAPE);
     }
 
     public static Specification<Nacionalidade> isoContem(String iso) {
         return (root, query, cb) ->
-                cb.like(cb.lower(root.get("iso")), "%" + iso.toLowerCase(Locale.ROOT) + "%");
+                cb.like(cb.lower(root.get("iso")), BuscaTexto.contem(iso), BuscaTexto.ESCAPE);
     }
 }
