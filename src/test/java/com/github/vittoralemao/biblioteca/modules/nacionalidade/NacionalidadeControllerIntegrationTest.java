@@ -87,4 +87,19 @@ public class NacionalidadeControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(0));
     }
+
+    @Test
+    @WithMockUser(roles = "OPERADOR")
+    void deveTratarCaracteresCuringaComoTextoNaBusca() throws Exception {
+        salvarNacionalidade("BRASILEIRA", "BRA");
+        salvarNacionalidade("INGLESA", "GBR");
+
+        mockMvc.perform(get(URL).param("nome", "%"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(0));
+
+        mockMvc.perform(get(URL).param("nome", "_"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(0));
+    }
 }
