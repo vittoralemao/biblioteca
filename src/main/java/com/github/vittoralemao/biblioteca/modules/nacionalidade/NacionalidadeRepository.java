@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public interface NacionalidadeRepository extends JpaRepository<Nacionalidade, UUID>, JpaSpecificationExecutor<Nacionalidade> {
 
-    boolean existsByNome(String nome);
+    boolean existsByNomeIgnoreCase(String nome);
     boolean existsByIso(String iso);
 
-    boolean existsByNomeAndIdNot(String nome, UUID id);
+    boolean existsByNomeIgnoreCaseAndIdNot(String nome, UUID id);
     boolean existsByIsoAndIdNot(String iso, UUID id);
 
 }

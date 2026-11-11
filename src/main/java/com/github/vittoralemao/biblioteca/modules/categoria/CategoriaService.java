@@ -26,7 +26,7 @@ public class CategoriaService {
     public CategoriaResponseDTO cadastrar(CategoriaRequestDTO dto){
         Categoria categoria = toEntity(dto);
 
-        if (categoriaRepository.existsByNome(categoria.getNome())){
+        if (categoriaRepository.existsByNomeIgnoreCase(categoria.getNome())){
             throw new CategoriaDuplicadaException("Categoria já existente! ");
         }
 
@@ -41,7 +41,7 @@ public class CategoriaService {
                 orElseThrow(() -> new CategoriaNaoEncontradaException(CATEGORIA_NAO_ENCONTRADA + id));
 
 
-        if (categoriaRepository.existsByNomeAndIdNot(dto.nome(), categoria.getId())){
+        if (categoriaRepository.existsByNomeIgnoreCaseAndIdNot(dto.nome(), categoria.getId())){
             throw new CategoriaDuplicadaException("Já existe categoria com o nome: " + dto.nome());
         }
 

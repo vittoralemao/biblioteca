@@ -30,7 +30,7 @@ public class NacionalidadeServiceTest {
     void deveCadastrarNacionalidadeQuandoNomeEIsoNaoExiste() {
         NacionalidadeRequestDTO dto = new NacionalidadeRequestDTO("BRASILEIRA", "BRA");
 
-        when(nacionalidadeRepository.existsByNome("BRASILEIRA")).thenReturn(false);
+        when(nacionalidadeRepository.existsByNomeIgnoreCase("BRASILEIRA")).thenReturn(false);
         when(nacionalidadeRepository.existsByIso("BRA")).thenReturn(false);
         when(nacionalidadeRepository.save(any(Nacionalidade.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -46,7 +46,7 @@ public class NacionalidadeServiceTest {
     void naoDeveCadastrarNacionalidadeComNomeExistente() {
         NacionalidadeRequestDTO dto = new NacionalidadeRequestDTO("BRASILEIRA", "BRA");
 
-        when(nacionalidadeRepository.existsByNome("BRASILEIRA")).thenReturn(true);
+        when(nacionalidadeRepository.existsByNomeIgnoreCase("BRASILEIRA")).thenReturn(true);
 
         assertThatThrownBy(() -> nacionalidadeService.cadastrar(dto))
                 .isInstanceOf(NacionalidadeDuplicadaException.class)
@@ -59,7 +59,7 @@ public class NacionalidadeServiceTest {
     void naoDeveCadastrarNacionalidadeComIsoExistente() {
         NacionalidadeRequestDTO dto = new NacionalidadeRequestDTO("BRASILEIRA", "BRA");
 
-        when(nacionalidadeRepository.existsByNome("BRASILEIRA")).thenReturn(false);
+        when(nacionalidadeRepository.existsByNomeIgnoreCase("BRASILEIRA")).thenReturn(false);
         when(nacionalidadeRepository.existsByIso("BRA")).thenReturn(true);
 
         assertThatThrownBy(() -> nacionalidadeService.cadastrar(dto))
@@ -80,7 +80,7 @@ public class NacionalidadeServiceTest {
         nacionalidade.setIso("BRA");
 
         when(nacionalidadeRepository.findById(id)).thenReturn(Optional.of(nacionalidade));
-        when(nacionalidadeRepository.existsByNomeAndIdNot("BRASILEIRA", id)).thenReturn(true);
+        when(nacionalidadeRepository.existsByNomeIgnoreCaseAndIdNot("BRASILEIRA", id)).thenReturn(true);
 
         assertThatThrownBy(() -> nacionalidadeService.atualizar(id, dto))
                 .isInstanceOf(NacionalidadeDuplicadaException.class)
@@ -101,7 +101,7 @@ public class NacionalidadeServiceTest {
         nacionalidade.setIso("BRA");
 
         when(nacionalidadeRepository.findById(id)).thenReturn(Optional.of(nacionalidade));
-        when(nacionalidadeRepository.existsByNomeAndIdNot("BRASILEIRA", id)).thenReturn(false);
+        when(nacionalidadeRepository.existsByNomeIgnoreCaseAndIdNot("BRASILEIRA", id)).thenReturn(false);
         when(nacionalidadeRepository.existsByIsoAndIdNot("BRA", id)).thenReturn(true);
 
         assertThatThrownBy(() -> nacionalidadeService.atualizar(id, dto))

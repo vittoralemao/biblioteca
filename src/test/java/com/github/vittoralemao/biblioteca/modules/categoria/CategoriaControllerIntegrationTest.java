@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -32,10 +33,10 @@ public class CategoriaControllerIntegrationTest {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    private void salvarCategoria(String nome) {
+    private Categoria salvarCategoria(String nome) {
         Categoria categoria = new Categoria();
         categoria.setNome(nome);
-        categoriaRepository.save(categoria);
+        return categoriaRepository.save(categoria);
     }
 
     @Test
@@ -112,5 +113,35 @@ public class CategoriaControllerIntegrationTest {
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.nome").value("POESIA"))
                 .andExpect(jsonPath("$.id").isNotEmpty());
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar409AoCadastrarNomeExistenteEmOutraCaixa() throws Exception {
+        salvarCategoria("Romance");
+        mockMvc.perform(post(URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                        "nome":"romance"
+                        }
+                        """))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar409AoAtualizarParaNomeExistenteEmOutraCaixa() throws Exception {
+        salvarCategoria("ROMANCE");
+        Categoria fantasia = salvarCategoria("FANTASIA");
+
+        mockMvc.perform(put(URL + "/" + fantasia.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                "nome":"romance"
+                                }
+                                """))
+                .andExpect(status().isConflict());
     }
 }

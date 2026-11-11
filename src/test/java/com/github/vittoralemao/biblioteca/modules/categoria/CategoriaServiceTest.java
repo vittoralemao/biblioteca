@@ -31,7 +31,7 @@ public class CategoriaServiceTest {
     @Test
     void deveCadastrarCategoriaQuandoNomeNaoExiste() {
         CategoriaRequestDTO dto = new CategoriaRequestDTO("POESIA");
-        when(categoriaRepository.existsByNome("POESIA")).thenReturn(false);
+        when(categoriaRepository.existsByNomeIgnoreCase("POESIA")).thenReturn(false);
         when(categoriaRepository.save(any(Categoria.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -45,7 +45,7 @@ public class CategoriaServiceTest {
     @Test
     void naoDeveCadastrarCategoriaComNomeDuplicado(){
         CategoriaRequestDTO dto = new CategoriaRequestDTO("ROMANCE");
-        when(categoriaRepository.existsByNome("ROMANCE")).thenReturn(true);
+        when(categoriaRepository.existsByNomeIgnoreCase("ROMANCE")).thenReturn(true);
 
         assertThatThrownBy(() -> categoriaService.cadastrar(dto))
                 .isInstanceOf(CategoriaDuplicadaException.class);
@@ -63,7 +63,7 @@ public class CategoriaServiceTest {
         categoria.setNome("FICCAO");
 
         when(categoriaRepository.findById(id)).thenReturn(Optional.of(categoria));
-        when(categoriaRepository.existsByNomeAndIdNot("FICCAO", id)).thenReturn(true);
+        when(categoriaRepository.existsByNomeIgnoreCaseAndIdNot("FICCAO", id)).thenReturn(true);
 
         assertThatThrownBy(() -> categoriaService.atualizar(id, dto))
                 .isInstanceOf(CategoriaDuplicadaException.class);

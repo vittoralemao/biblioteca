@@ -27,7 +27,7 @@ public class NacionalidadeService {
     public NacionalidadeResponseDTO cadastrar (NacionalidadeRequestDTO dto){
         Nacionalidade nacionalidade = toEntity(dto);
 
-        if(nacionalidadeRepository.existsByNome(nacionalidade.getNome())) {
+        if(nacionalidadeRepository.existsByNomeIgnoreCase(nacionalidade.getNome())) {
             throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o nome: " + dto.nome());
         }
 
@@ -45,7 +45,7 @@ public class NacionalidadeService {
                 findById(id)
                 .orElseThrow(() -> new NacionalidadeNaoEncontradaException(NACIONALIDADE_NAO_ENCONTRADA + id));
 
-        if(nacionalidadeRepository.existsByNomeAndIdNot(dto.nome(), id)) {
+        if(nacionalidadeRepository.existsByNomeIgnoreCaseAndIdNot(dto.nome(), id)) {
             throw new NacionalidadeDuplicadaException("Já existe nacionalidade com o nome: " + dto.nome());
         }
 
