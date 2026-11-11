@@ -3,16 +3,20 @@ package com.github.vittoralemao.biblioteca.modules.nacionalidade;
 import com.github.vittoralemao.biblioteca.TestContainerConfiguration;
 import com.github.vittoralemao.biblioteca.config.ApiVersionConfig;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -101,5 +105,51 @@ public class NacionalidadeControllerIntegrationTest {
         mockMvc.perform(get(URL).param("nome", "_"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(0));
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveNormalizarIsoParaMaiusculasAoCadastrar() throws Exception {
+        mockMvc.perform(post(URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                        "nome":"BRASILEIRA",
+                        "iso":"bra"
+                        }
+                        """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.iso").value("BRA"))
+                .andExpect(jsonPath("$.nome").value("BRASILEIRA"));
+    }
+
+    @Test
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar409QuandoIsoJaExisteEmOutraCaixa() throws Exception {
+        salvarNacionalidade("BRASILEIRA", "BRA");
+        mockMvc.perform(post(URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {
+                        "nome":"BRASILEIRA",
+                        "iso":"bra"
+                        }
+                        """))
+                .andExpect(status().isConflict());
+    }
+
+    @ParameterizedTest(name = "ISO \"{0}\" é invalido")
+    @ValueSource(strings = {"1@#", "BR", "BRAS"})
+    @WithMockUser(roles = "GERENTE")
+    void deveRetornar400QuandoIsoNaoTemTresLetras(String iso) throws Exception {
+        mockMvc.perform(post(URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                        "nome":"TESTE",
+                        "iso":"%s"
+                        }
+                        """.formatted(iso)))
+                .andExpect(status().isBadRequest());
     }
 }
